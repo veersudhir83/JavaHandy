@@ -1,0 +1,31 @@
+<project name="windowsservices2" default="restart" basedir=".">
+	<description>
+		To stop windows services
+	</description>
+
+	<property name="servicename" value="Credential Manager" />
+
+	<macrodef name="service">
+		<attribute name="service" />
+		<attribute name="action" />
+		<sequential>
+			<exec executable="cmd.exe">
+				<arg line="/c net @{action} '@{service}'" />
+			</exec>
+		</sequential>
+	</macrodef>
+	
+	<target name="start">
+		<service action="start" service="${servicename}" />
+	</target>
+	<target name="stop">
+		<service action="stop" service="${servicename}" />
+		<exec dir="." executable="cmd.exe">
+			<arg line ="/c taskkill /f /fi 'services eq ${servicename}' " />
+		</exec>
+		<sleep seconds="5" />
+	</target>
+	
+	<target name="restart" depends="stop,start" />
+	
+</project>

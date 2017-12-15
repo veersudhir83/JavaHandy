@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Builder.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCo-codequality</a> &gt; <a href="index.source.html" class="el_package">com.ge.sample</a> &gt; <span class="el_source">Builder.java</span></div><h1>Builder.java</h1><pre class="source lang-java linenums">package com.ge.sample;
+
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+
+
+<span class="nc" id="L12">public class Builder {</span>
+	public static void main(String[] args) throws IOException {
+		// TODO Auto-generated method stub
+		//sample();
+<span class="nc" id="L16">		System.out.println(&quot;Started&quot; + System.currentTimeMillis()/1000);</span>
+<span class="nc" id="L17">		File zipFile3 = new File (&quot;D:/gegdc/SV40298/jboss4.0.3/server/default/log/opt/shared/data/tdmdataaccess/temp/javaOut2.tzf&quot;);</span>
+<span class="nc" id="L18">		File zipFile2 = new File (&quot;D:/gegdc/SV40298/jboss4.0.3/server/default/log/opt/shared/data/tdmdataaccess/temp/javaOut.tzf&quot;);</span>
+<span class="nc" id="L19">		FileOutputStream out = new FileOutputStream(zipFile3);</span>
+<span class="nc" id="L20">		InputStream inStream = null;</span>
+<span class="nc" id="L21">		BufferedInputStream buffStream = null;</span>
+<span class="nc" id="L22">		inStream = new FileInputStream(zipFile2);</span>
+<span class="nc" id="L23">		buffStream = new BufferedInputStream(inStream);</span>
+<span class="nc" id="L24">		byte[] buffer = new byte[Short.MAX_VALUE];					</span>
+		int len;
+<span class="nc bnc" id="L26" title="All 2 branches missed.">        while((len = buffStream.read(buffer)) &gt; 0) {</span>
+<span class="nc" id="L27">            out.write(buffer, 0, len);</span>
+        }
+<span class="nc" id="L29">		buffStream.close();</span>
+<span class="nc" id="L30">		inStream.close();</span>
+<span class="nc" id="L31">		out.close();</span>
+<span class="nc" id="L32">		System.out.println(&quot;End    &quot; + System.currentTimeMillis()/1000);</span>
+<span class="nc" id="L33">	}</span>
+
+	private static void sample() {
+		// TODO Auto-generated method stub
+<span class="nc" id="L37">		String s = &quot;13050553,DEV,NOMODEL-G,123-001/1,NPSS,P2,9880,1,1,9999-12-31 00:00:00,NONE,-999,NONE,NONE      ,2012-10-05 05:32:10,TESTSITE,1,ENGINE,SS,0,1,NONE,NONE,NONE,NONE,1768.39794899999993,1222.40905799999996,3669.56933600000002,14.69599915,22.88507843,529.61602779999998,600.99493410000002,1768.39794899999993,1222.40905799999996,1.557231903\n&quot;;</span>
+<span class="nc" id="L38">		StringBuilder sb = new StringBuilder();</span>
+<span class="nc" id="L39">		System.out.println(&quot;Started&quot; + System.currentTimeMillis()/1000);</span>
+<span class="nc bnc" id="L40" title="All 2 branches missed.">		for (int i=1; i&lt;=2000; i++) {</span>
+<span class="nc" id="L41">			sb.append(s);</span>
+		}
+<span class="nc" id="L43">		System.out.println(&quot;End    &quot; + System.currentTimeMillis()/1000);</span>
+<span class="nc" id="L44">		System.out.println(sb.capacity());</span>
+<span class="nc" id="L45">		System.out.println(sb.toString());</span>
+<span class="nc" id="L46">	}</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

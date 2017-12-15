@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>PrimeTest.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCo-codequality</a> &gt; <a href="index.source.html" class="el_package">com.ge.sample</a> &gt; <span class="el_source">PrimeTest.java</span></div><h1>PrimeTest.java</h1><pre class="source lang-java linenums">package com.ge.sample;
+
+import java.util.*;
+
+<span class="nc" id="L5">public class PrimeTest {</span>
+
+    public static void main(String[]args){
+<span class="nc" id="L8">    int p = -999;</span>
+<span class="nc" id="L9">    Scanner in = new Scanner(System.in);</span>
+<span class="nc" id="L10">    System.out.printf(&quot;enter two integers (smaller num first):&quot;);</span>
+<span class="nc" id="L11">    int a= in.nextInt();</span>
+<span class="nc" id="L12">    int b=in.nextInt();</span>
+<span class="nc bnc" id="L13" title="All 2 branches missed.">    while(a&lt;b){</span>
+<span class="nc bnc" id="L14" title="All 2 branches missed.">    for(int x=0;x&lt;20;x++) {</span>
+<span class="nc" id="L15">    	p=isPrime(a,b);</span>
+    }
+<span class="nc" id="L17">    System.out.println(&quot;\nthe prime numbers between %d and %d are : %d\n&quot; + a + b + p);</span>
+
+    }
+<span class="nc" id="L20">    }</span>
+
+public  static int isPrime(int a, int b){
+<span class="nc" id="L23">	int x = -999;</span>
+<span class="nc bnc" id="L24" title="All 2 branches missed.">    while (a&lt;b){</span>
+	    int n;
+<span class="nc" id="L26">	    n=a+1;</span>
+<span class="nc" id="L27">	    n++;</span>
+<span class="nc bnc" id="L28" title="All 2 branches missed.">		for ( int i=2; i&lt;b ;i++ ) {</span>
+<span class="nc" id="L29">			x = (n%i);</span>
+<span class="nc bnc" id="L30" title="All 2 branches missed.">           if(i == n)</span>
+<span class="nc" id="L31">        	   break;</span>
+	    }
+
+<span class="nc" id="L34">	 }</span>
+<span class="nc" id="L35">    return x;</span>
+}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

@@ -1,0 +1,37 @@
+<project name="codequality" default="run" basedir="." xmlns:ac="antlib:net.sf.antcontrib" xmlns:jacoco="antlib:org.jacoco.ant">
+	<description>   
+        Ant build sample for running 
+    </description>
+
+	<property name="lib.dir" location="${basedir}/lib" />
+	<property name="src.dir" location="${basedir}/src" />
+	<property name="bin.dir" location="${basedir}/bin" />
+
+	<!-- Cleans workspace -->
+	<target name="clean" description="Delete all result to start with a clean build.">
+		<delete dir="${report.checkstyle.dir}" />
+		<delete dir="${report.findbugs.dir}" />
+		<delete dir="${report.pmd.dir}" />
+		<delete dir="${bin.dir}" />
+		<delete dir="${report.jacoco.dir}" />
+		<mkdir dir="${report.dir}" />
+	</target>
+
+	<!-- Source Code compiler -->
+	<target name="compile" depends="clean" description="Compile the entire project.">
+		<path id="classpath">
+			<fileset dir="${lib.dir}" includes="*.jar"/>
+    		</path>
+		<mkdir dir="${bin.dir}" />
+		<javac srcdir="${src.dir}" destdir="${bin.dir}" debug="on" deprecation="on">
+			<classpath refid="classpath"/>
+		</javac>
+	</target>
+
+	<!-- Primary Target to run -->
+	<target name="run" description="Run the build" 
+		depends="clean, 
+			compile">
+	</target>
+
+</project>

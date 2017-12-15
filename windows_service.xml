@@ -1,0 +1,35 @@
+<project name="windowsservices" default="run" basedir=".">
+	<description>
+		To stop windows services
+	</description>
+
+    <property name="servicename" value="Credential Manager" />
+    
+	<macrodef name="service">
+		<attribute name="service" />
+		<attribute name="action" />
+		<sequential>
+			<exec executable="cmd.exe">
+				<arg line="/c net @{action} '@{service}'" />
+			</exec>
+		</sequential>
+	</macrodef>
+
+	<target name="start.service">
+		<service action="start" service="${servicename}" />
+	</target>
+
+	<target name="stop.service">
+		<service action="stop" service="${servicename}" />
+		<exec dir="." executable="cmd.exe">
+			<arg line="/c taskkill /f /fi 'services eq ${servicename}' " />
+		</exec>
+		<sleep seconds="5" />
+	</target>
+
+	<!-- Primary Target to run -->
+	<target name="run" description="Run the build" 
+		depends="start.service,stop.service">
+	</target>
+
+</project>

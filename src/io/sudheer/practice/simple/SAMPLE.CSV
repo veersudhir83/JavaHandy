@@ -1,0 +1,9 @@
+Build Type,Date, Time, Application,Environment,Release,Publish Type,App Job Name, App Job Build Number,Spinner Job Name, Spinner Job Build Number,App Job Duration,Spinner Job Duration,Total Execution,Total Time (In mins.secs)
+Auto,9/21/2016,06:41:37,WINDPLM,DEV,wind_dev_4_5,all,PLM-WINDPLM-APP,888,PLM-WINDPLM-DB,755,5 mins 29 secs,0 mins 26 secs,5 mins 55 secs,5.55
+Manual,9/21/2016,06:43:41,NuclearPLM,QA,Release_4_0,all,PLM-NuclearPLM-APP,75,PLM-NuclearPLM-DB,64,0 mins 0 secs,0 mins 37 secs,0 mins 37 secs,0.37
+Auto,9/21/2016,10:39:11,WINDPLM,DEV,wind_dev_4_5,all,PLM-WINDPLM-APP,889,PLM-WINDPLM-DB,756,2 mins 47 secs,0 mins 21 secs,3 mins 9 secs,3.9
+Manual,9/21/2016,11:44:30,NuclearPLM,DEV,Release_4_0,all,PLM-NuclearPLM-APP,76,PLM-NuclearPLM-DB,65,14 mins 42 secs,0 mins 32 secs,15 mins 14 secs,15.14
+Manual,9/21/2016,13:03:38,POWERPLM,DEV1,Release_1_0,all,PLM-POWERPLM-APP,90,PLM-POWERPLM-DB,72,0 mins 0 secs,0 mins 35 secs,0 mins 35 secs,0.35
+Manual,9/21/2016,15:50:24,POWERPLM,DEV1,Release_1_0,db,PLM-POWERPLM-APP,91,PLM-POWERPLM-DB,73,11 mins 58 secs,0 mins 30 secs,12 mins 28 secs,12.28
+Auto,9/22/2016,02:39:18,WINDPLM,DEV,wind_dev_4_5,db,PLM-WINDPLM-APP,890,PLM-WINDPLM-DB,757,1 mins 37 secs,0 mins 27 secs,2 mins 5 secs,2.5
+Auto,9/22/2016,03:16:06,WINDPLM,QA,Release_4_5,db,PLM-WINDPLM-APP,891,PLM-WINDPLM-DB,758,5 mins 22 secs,0 mins 32 secs,5 mins 54 secs,5.54

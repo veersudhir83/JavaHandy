@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>Compress2.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCo-codequality</a> &gt; <a href="index.source.html" class="el_package">com.ge.sample</a> &gt; <span class="el_source">Compress2.java</span></div><h1>Compress2.java</h1><pre class="source lang-java linenums">package com.ge.sample;
+
+import java.util.zip.*;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
+
+<span class="nc" id="L7">public class Compress2 {</span>
+	public static void main(String[] args) {
+<span class="nc" id="L9">	    String input = &quot;13050553,DEV,NOMODEL-G,123-001/1,NPSS,P2,9880,1,1,9999-12-31 00:00:00,NONE,-999,NONE,NONE      ,2012-10-05 05:32:10,TESTSITE,1,ENGINE,SS,0,1,NONE,NONE,NONE,NONE,1768.39794899999993,1222.40905799999996,3669.56933600000002,14.69599915,22.88507843,529.61602779999998,600.99493410000002,1768.39794899999993,1222.40905799999996,1.557231903\n&quot;</span>
+	    			+ &quot;13050580,DEV,NOMODEL-G,123-001/1,NPSS,P2,9880,1,1,9999-12-31 00:00:00,NONE,-999,NONE,NONE      ,2012-02-22 08:51:57,TESTSITE,2,ENGINE,SS,0,1,NONE,NONE,NONE,NONE,1768.4285890000001,1222.43640099999993,3669.65893599999981,14.69599915,22.8849411,529.61584470000003,600.99371340000005,1768.4285890000001,1222.43640099999993,1.557222605\n&quot;
+	    			+ &quot;13050603,DEV,NOMODEL-G,123-001/1,NPSS,P2,9880,1,1,9999-12-31 00:00:00,NONE,-999,NONE,NONE      ,2012-02-22 08:51:57,TESTSITE,3,ENGINE,SS,0,1,NONE,NONE,NONE,NONE,1768.4285890000001,1222.43627900000001,3669.65869100000009,14.6960001,22.88494301,529.61590579999995,600.99371340000005,1768.4285890000001,1222.43627900000001,1.557222605&quot;;
+	    /*byte[] data = new byte[Short.MAX_VALUE];
+
+	    int len = compressStringToBytes(input, data, data.length);
+	    //System.out.println(&quot;compressed len::&quot; + len);
+
+	    String output = decompressString(data, len);
+
+	    if (!input.equals(output)) {
+	        System.out.println(&quot;Test failed&quot;);
+	    }
+
+	    System.out.println(&quot;Input:::&quot; + input + &quot;\nOutput:::&quot; + output);
+	    System.out.println(&quot;compressed data:::&quot; + compressString(input));*/
+<span class="nc" id="L25">	    byte[] b = compress(input.getBytes());</span>
+<span class="nc" id="L26">	}</span>
+
+	public static int compressStringToBytes(String data, byte[] output, int len) {
+<span class="nc" id="L29">		System.out.println(&quot;len heere::&quot; + len);</span>
+<span class="nc" id="L30">	    Deflater deflater = new Deflater();</span>
+<span class="nc" id="L31">	    deflater.setInput(data.getBytes(Charset.forName(&quot;utf-8&quot;)));</span>
+<span class="nc" id="L32">	    deflater.finish();</span>
+<span class="nc" id="L33">	    return deflater.deflate(output, 0, len);</span>
+	}
+	
+	public static byte[] compress(byte[] bytesToCompress)
+	{		
+<span class="nc" id="L38">		Deflater deflater = new Deflater();</span>
+<span class="nc" id="L39">		deflater.setInput(bytesToCompress);</span>
+<span class="nc" id="L40">		deflater.finish();</span>
+
+<span class="nc" id="L42">		byte[] bytesCompressed = new byte[Short.MAX_VALUE];</span>
+
+<span class="nc" id="L44">		int numberOfBytesAfterCompression = deflater.deflate(bytesCompressed);</span>
+
+<span class="nc" id="L46">		byte[] returnValues = new byte[numberOfBytesAfterCompression];</span>
+
+<span class="nc" id="L48">		System.arraycopy</span>
+		(
+			bytesCompressed,
+			0,
+			returnValues,
+			0,
+			numberOfBytesAfterCompression
+		);
+<span class="nc" id="L56">		System.out.println(&quot;numberOfBytesAfterCompression:::&quot; + numberOfBytesAfterCompression);</span>
+<span class="nc" id="L57">		System.out.println(&quot;bytesCompressed:::&quot; + bytesCompressed);</span>
+<span class="nc" id="L58">		System.out.println(&quot;Decompressed String:::\n&quot; + decompressString(bytesCompressed, numberOfBytesAfterCompression));</span>
+
+<span class="nc" id="L60">		return returnValues;</span>
+	}
+	
+	public static byte[] compressString(String stringToCompress)
+	{		
+<span class="nc" id="L65">		byte[] returnValues = null;</span>
+
+		try
+		{
+
+<span class="nc" id="L70">			returnValues = compress</span>
+			(
+				stringToCompress.getBytes(&quot;UTF-8&quot;)
+			);
+		}
+<span class="nc" id="L75">		catch (UnsupportedEncodingException uee)</span>
+		{
+<span class="nc" id="L77">			uee.printStackTrace();</span>
+<span class="nc" id="L78">		}</span>
+
+<span class="nc" id="L80">		return returnValues;</span>
+	}
+
+	public static String decompressString(byte[] input, int len) {
+
+<span class="nc" id="L85">	    String result = null;</span>
+	    try {
+<span class="nc" id="L87">	        Inflater inflater = new Inflater();</span>
+<span class="nc" id="L88">	        inflater.setInput(input, 0, len);</span>
+
+<span class="nc" id="L90">	        byte[] output = new byte[Short.MAX_VALUE]; //todo may oveflow, find better solution</span>
+<span class="nc" id="L91">	        int resultLength = inflater.inflate(output);</span>
+<span class="nc" id="L92">	        inflater.end();</span>
+
+<span class="nc" id="L94">	        result = new String(output, 0, resultLength, Charset.forName(&quot;utf-8&quot;));</span>
+<span class="nc" id="L95">	    } catch (DataFormatException e) {</span>
+	        // TODO Auto-generated catch block
+<span class="nc" id="L97">	        e.printStackTrace();</span>
+<span class="nc" id="L98">	    }</span>
+
+<span class="nc" id="L100">	    return result;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

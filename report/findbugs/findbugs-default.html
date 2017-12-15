@@ -1,0 +1,2324 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<title>
+        FindBugs (3.0.1)
+         Analysis for
+         </title>
+<script type="text/javascript">
+         function show(foo) {
+            document.getElementById(foo).style.display="block";
+         }
+         function hide(foo) {
+            document.getElementById(foo).style.display="none";
+         }
+         function toggle(foo) {
+            if( document.getElementById(foo).style.display == "none") {
+               show(foo);
+            } else {
+               if( document.getElementById(foo).style.display == "block") {
+                  hide(foo);
+               } else {
+                  show(foo);
+               }
+            }
+         }
+
+         function showmenu(foo) {
+            if( document.getElementById(foo).style.display == "none") {
+               hide("bug-summary");
+               document.getElementById("bug-summary-tab").className="menu-tab";
+               hide("analysis-data");
+               document.getElementById("analysis-data-tab").className="menu-tab";
+               //hide("list-by-b-t");
+               //document.getElementById("list-by-b-t-tab").className="menu-tab";
+               hide("list-by-package");
+               document.getElementById("list-by-package-tab").className="menu-tab";
+               hide("list-by-category");
+               document.getElementById("list-by-category-tab").className="menu-tab";
+               document.getElementById(foo+"-tab").className="menu-tab-selected";
+               show(foo);
+
+            }
+            // else menu already selected!
+         }
+         function showbug(buguid, list) {
+            var bugplaceholder   = document.getElementById(buguid+'-ph-'+list);
+            var bug              = document.getElementById(buguid);
+
+            if ( bugplaceholder==null) {
+               alert(buguid+'-ph-'+list+' - '+buguid+' - bugplaceholder==null');
+               return;
+            }
+            if ( bug==null) {
+               alert(buguid+'-ph-'+list+' - '+buguid+' - bug==null');
+               return;
+            }
+
+            var oldBug = bugplaceholder.innerHTML;
+            var newBug = bug.innerHTML;
+            //alert(oldBug);
+            //alert(newBug);
+            toggle(buguid+'-ph-'+list);
+            bugplaceholder.innerHTML = newBug;
+         }
+      </script>
+<script type="text/javascript">
+     /*  */
+         // Extended Tooltip Javascript
+         // copyright 9th August 2002, 3rd July 2005
+         // by Stephen Chapman, Felgall Pty Ltd
+
+         // permission is granted to use this javascript provided that the below code is not altered
+         var DH = 0;var an = 0;var al = 0;var ai = 0;if (document.getElementById) {ai = 1; DH = 1;}else {if (document.all) {al = 1; DH = 1;} else { browserVersion = parseInt(navigator.appVersion); if (navigator.appName.indexOf('Netscape') != -1) if (browserVersion == 4) {an = 1; DH = 1;}}}
+         function fd(oi, wS) {if (ai) return wS ? document.getElementById(oi).style:document.getElementById(oi); if (al) return wS ? document.all[oi].style: document.all[oi]; if (an) return document.layers[oi];}
+         function pw() {return window.innerWidth != null? window.innerWidth: document.body.clientWidth != null? document.body.clientWidth:null;}
+         function mouseX(evt) {if (evt.pageX) return evt.pageX; else if (evt.clientX)return evt.clientX + (document.documentElement.scrollLeft ?  document.documentElement.scrollLeft : document.body.scrollLeft); else return null;}
+         function mouseY(evt) {if (evt.pageY) return evt.pageY; else if (evt.clientY)return evt.clientY + (document.documentElement.scrollTop ? document.documentElement.scrollTop : document.body.scrollTop); else return null;}
+         function popUp(evt,oi) {if (DH) {var wp = pw(); ds = fd(oi,1); dm = fd(oi,0); st = ds.visibility; if (dm.offsetWidth) ew = dm.offsetWidth; else if (dm.clip.width) ew = dm.clip.width; if (st == "visible" || st == "show") { ds.visibility = "hidden"; } else {tv = mouseY(evt) + 20; lv = mouseX(evt) - (ew/4); if (lv < 2) lv = 2; else if (lv + ew > wp) lv -= ew/2; if (!an) {lv += 'px';tv += 'px';} ds.left = lv; ds.top = tv; ds.visibility = "visible";}}}
+  /*  */
+</script>
+<style type="text/css">
+         html, body {
+            background-color: #ffffff;
+         }
+         a, a:link , a:active, a:visited, a:hover {
+            text-decoration: none; color: black;
+         }
+         .b-r a {
+            text-decoration: underline; color: blue;
+         }
+         div, span {
+            vertical-align: top;
+         }
+         p {
+            margin: 0px;
+         }
+         h1 {
+            /*font-size: 14pt;*/
+            color: red;
+         }
+         #menu {
+            margin-bottom: 10px;
+         }
+         #menu ul {
+            margin-left: 0;
+            padding-left: 0;
+            display: inline;
+         }
+         #menu ul li {
+            margin-left: 0;
+            margin-bottom: 0;
+            padding: 2px 15px 5px;
+            border: 1px solid #000;
+            list-style: none;
+            display: inline;
+         }
+         #menu ul li.here {
+            border-bottom: 1px solid #ffc;
+            list-style: none;
+            display: inline;
+         }
+         .menu-tab {
+            background: white;
+         }
+         .menu-tab:hover {
+            background: grey;
+         }
+         .menu-tab-selected {
+            background: #aaaaaa;
+         }
+         #analysis-data ul {
+            margin-left: 15px;
+         }
+         #analyzed-files, #used-libraries, #analysis-error {
+           margin: 2px;
+           border: 1px black solid;
+           padding: 2px;
+           float: left;
+           overflow:auto;
+         }
+         #analyzed-files {
+           width: 25%;
+         }
+         #used-libraries {
+           width: 25%;
+         }
+         #analysis-error {
+           width: 40%;
+         }
+         div.summary {
+            width:100%;
+            text-align:left;
+         }
+         .summary table {
+            border:1px solid black;
+         }
+         .summary th {
+            background: #aaaaaa;
+            color: white;
+         }
+         .summary th, .summary td {
+            padding: 2px 4px 2px 4px;
+         }
+         .summary-name {
+            background: #eeeeee;
+            text-align:left;
+         }
+         .summary-size {
+            background: #eeeeee;
+            text-align:center;
+         }
+         .summary-ratio {
+            background: #eeeeee;
+            text-align:center;
+         }
+         .summary-priority-all {
+            background: #dddddd;
+            text-align:center;
+         }
+         .summary-priority-1 {
+            background: red;
+            text-align:center;
+         }
+         .summary-priority-2 {
+            background: orange;
+            text-align:center;
+         }
+         .summary-priority-3 {
+            background: green;
+            text-align:center;
+         }
+         .summary-priority-4 {
+            background: blue;
+            text-align:center;
+         }
+         .ob {
+            border: 1px solid black;
+            margin: 10px;
+         }
+         .ob-t {
+            border-bottom: 1px solid #000000; font-size: 12pt; font-weight: bold;
+            background: #cccccc; margin: 0; padding: 0 5px 0 5px;
+         }
+         .t-h {
+            font-weight: normal;
+         }
+         .ib-1, .ib-2 {
+            margin: 0 0 0 10px;
+         }
+         .ib-1-t, .ib-2-t {
+            border-bottom: 1px solid #000000; border-left: 1px solid #000000;
+            margin: 0; padding: 0 5px 0 5px;
+            font-size: 12pt; font-weight: bold; background: #cccccc;
+         }
+         .bb {
+            border-bottom: 1px solid #000000; border-left: 1px solid #000000;
+         }
+         .b-1 {
+            background: red; height: 0.5em; width: 1em;
+            margin-right: 0.5em;
+         }
+         .b-2 {
+            background: orange; height: 0.5em; width: 1em;
+            margin-right: 0.5em;
+         }
+         .b-3 {
+            background: green; height: 0.5em; width: 1em;
+            margin-right: 0.5em;
+         }
+         .b-4 {
+            background: blue; height: 0.5em; width: 1em;
+            margin-right: 0.5em;
+         }
+         .b-t {
+         }
+         .b-r {
+            font-size: 10pt; font-weight: bold; padding: 0 0 0 60px;
+         }
+         .b-d {
+            font-weight: normal; background: #eeeee0;
+            padding: 0 5px 0 5px; margin: 0px;
+         }
+         .bug-placeholder {
+            top:140px;
+            border:1px solid black;
+            display:none;
+         }
+         .tip {
+            border:solid 1px #666666;
+            width:600px;
+            padding:3px;
+            position:absolute;
+            z-index:100;
+            visibility:hidden;
+            color:#333333;
+            top:20px;
+            left:90px;
+            background-color:#ffffcc;
+            layer-background-color:#ffffcc;
+         }
+
+
+      </style>
+</head>
+<body>
+<div id="content">
+<h1>
+         FindBugs (3.0.1)
+         Analysis for
+         </h1>
+<div id="menu">
+<ul>
+<li id="bug-summary-tab" class="menu-tab-selected" onclick="showmenu('bug-summary');return false;">
+<a href="" onclick="return false;">Bug Summary</a>
+</li>
+<li id="analysis-data-tab" class="menu-tab" onclick="showmenu('analysis-data');return false;">
+<a href="" onclick="return false;">Analysis Information</a>
+</li>
+<li id="list-by-category-tab" class="menu-tab" onclick="showmenu('list-by-category');return false;">
+<a href="" onclick="return false;">List bugs by bug category</a>
+</li>
+<li id="list-by-package-tab" class="menu-tab" onclick="showmenu('list-by-package');return false;">
+<a href="" onclick="return false;">List bugs by package</a>
+</li>
+</ul>
+</div>
+<div class="summary" id="bug-summary">
+<h2>FindBugs Analysis generated at: Wed, 28 Oct 2015 15:22:55 +0530</h2>
+<table>
+<tr>
+<th>Package</th>
+<th>Code Size</th>
+<th>Bugs</th>
+<th>High Prio Bugs</th>
+<th>Medium Prio Bugs</th>
+<th>Low Prio Bugs</th>
+<th>Exp. Bugs</th>
+<th>Ratio</th>
+</tr>
+<tr>
+<td class="summary-name">
+            Overall
+            (1 packages),
+            (37 classes)
+         </td>
+<td class="summary-size">1353</td>
+<td class="summary-priority-all">39</td>
+<td class="summary-priority-1">15</td>
+<td class="summary-priority-2">24</td>
+<td class="summary-priority-3"/>
+<td class="summary-priority-4"/>
+<td class="summary-ratio"/>
+</tr>
+<tr>
+<td class="summary-name">com.ge.sample</td>
+<td class="summary-size">1353</td>
+<td class="summary-priority-all">39</td>
+<td class="summary-priority-1">15</td>
+<td class="summary-priority-2">24</td>
+<td class="summary-priority-3"/>
+<td class="summary-priority-4"/>
+<td class="summary-ratio"/>
+</tr>
+</table>
+</div>
+<div id="analysis-data" style="display:none;">
+<div id="analyzed-files">
+<h3>Analyzed Files:</h3>
+<ul>
+<li>D:\gegdc\SV40298\Workspace\codequality\bin</li>
+</ul>
+</div>
+<div id="used-libraries">
+<h3>Used Libraries:</h3>
+<ul>
+<li>None</li>
+</ul>
+</div>
+<div id="analysis-error">
+<h3>Analysis Errors:</h3>
+<ul>
+<li>None</li>
+</ul>
+</div>
+</div>
+<div id="list-by-category" class="data-box" style="display:none;">
+<span class="b-1">&nbsp;&nbsp;</span> High Prio
+   <span class="b-2">&nbsp;&nbsp;</span> Medium Prio
+   <span class="b-3">&nbsp;&nbsp;</span> Low Prio
+   <span class="b-4">&nbsp;&nbsp;</span> Exp.
+<div class="ob">
+<div class="ob-t">
+<a href="" onclick="toggle('category-BAD_PRACTICE');return false;">Bad practice
+            (1:
+            <span class="t-h">0/1/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="category-BAD_PRACTICE">
+<div class="ib-1">
+<div class="ib-1-t">
+<a href="" onclick="toggle('category-BAD_PRACTICE-and-code-RR');return false;">RR: Method ignores results of InputStream.read()
+            (1:
+            <span class="t-h">0/1/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="category-BAD_PRACTICE-and-code-RR">
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('category-BAD_PRACTICE-and-code-RR-and-bug-SR_NOT_CHECKED');return false;" onmouseout="popUp(event,'tip-SR_NOT_CHECKED');" onmouseover="popUp(event,'tip-SR_NOT_CHECKED');">Method ignores results of InputStream.skip()&nbsp;&nbsp;
+            (1:
+            <span class="t-h">0/1/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="category-BAD_PRACTICE-and-code-RR-and-bug-SR_NOT_CHECKED">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-995fb2d021933364b75d7131f47ace7c-0','c');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">RR: </span>In class com.ge.sample.CountLines</a>
+<div style="display:none;" id="b-uid-995fb2d021933364b75d7131f47ace7c-0-ph-c">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ob">
+<div class="ob-t">
+<a href="" onclick="toggle('category-CORRECTNESS');return false;">Correctness
+            (5:
+            <span class="t-h">3/2/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="category-CORRECTNESS">
+<div class="ib-1">
+<div class="ib-1-t">
+<a href="" onclick="toggle('category-CORRECTNESS-and-code-IL');return false;">IL: Infinite Loop
+            (2:
+            <span class="t-h">2/0/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="category-CORRECTNESS-and-code-IL">
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('category-CORRECTNESS-and-code-IL-and-bug-IL_INFINITE_LOOP');return false;" onmouseout="popUp(event,'tip-IL_INFINITE_LOOP');" onmouseover="popUp(event,'tip-IL_INFINITE_LOOP');">An apparent infinite loop&nbsp;&nbsp;
+            (2:
+            <span class="t-h">2/0/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="category-CORRECTNESS-and-code-IL-and-bug-IL_INFINITE_LOOP">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-4fed553dff5c6cc42e0854d7e23cdf07-0','c');return false;">
+<span class="b-1">&nbsp;&nbsp;</span>
+<span class="b-t">IL: </span>In class com.ge.sample.PrimeTest</a>
+<div style="display:none;" id="b-uid-4fed553dff5c6cc42e0854d7e23cdf07-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-14fbe1616103ddfb3154136f643cd92c-0','c');return false;">
+<span class="b-1">&nbsp;&nbsp;</span>
+<span class="b-t">IL: </span>In class com.ge.sample.PrimeTest</a>
+<div style="display:none;" id="b-uid-14fbe1616103ddfb3154136f643cd92c-0-ph-c">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ib-1">
+<div class="ib-1-t">
+<a href="" onclick="toggle('category-CORRECTNESS-and-code-NP');return false;">NP: Null pointer dereference
+            (2:
+            <span class="t-h">1/1/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="category-CORRECTNESS-and-code-NP">
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('category-CORRECTNESS-and-code-NP-and-bug-NP_NULL_PARAM_DEREF');return false;" onmouseout="popUp(event,'tip-NP_NULL_PARAM_DEREF');" onmouseover="popUp(event,'tip-NP_NULL_PARAM_DEREF');">Method call passes null for non-null parameter&nbsp;&nbsp;
+            (1:
+            <span class="t-h">0/1/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="category-CORRECTNESS-and-code-NP-and-bug-NP_NULL_PARAM_DEREF">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-aa8cc9174a4bf9ac7792f8b5be577e1f-0','c');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">NP: </span>In class com.ge.sample.DateFormat</a>
+<div style="display:none;" id="b-uid-aa8cc9174a4bf9ac7792f8b5be577e1f-0-ph-c">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('category-CORRECTNESS-and-code-NP-and-bug-NP_NULL_PARAM_DEREF_NONVIRTUAL');return false;" onmouseout="popUp(event,'tip-NP_NULL_PARAM_DEREF_NONVIRTUAL');" onmouseover="popUp(event,'tip-NP_NULL_PARAM_DEREF_NONVIRTUAL');">Non-virtual method call passes null for non-null parameter&nbsp;&nbsp;
+            (1:
+            <span class="t-h">1/0/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="category-CORRECTNESS-and-code-NP-and-bug-NP_NULL_PARAM_DEREF_NONVIRTUAL">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-2ba2bd6b800951b27a9a5ef69adfeb-0','c');return false;">
+<span class="b-1">&nbsp;&nbsp;</span>
+<span class="b-t">NP: </span>In class com.ge.sample.SbAppend</a>
+<div style="display:none;" id="b-uid-2ba2bd6b800951b27a9a5ef69adfeb-0-ph-c">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ib-1">
+<div class="ib-1-t">
+<a href="" onclick="toggle('category-CORRECTNESS-and-code-USELESS_STRING');return false;">USELESS_STRING: Useless/non-informative string generated
+            (1:
+            <span class="t-h">0/1/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="category-CORRECTNESS-and-code-USELESS_STRING">
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('category-CORRECTNESS-and-code-USELESS_STRING-and-bug-DMI_INVOKING_TOSTRING_ON_ARRAY');return false;" onmouseout="popUp(event,'tip-DMI_INVOKING_TOSTRING_ON_ARRAY');" onmouseover="popUp(event,'tip-DMI_INVOKING_TOSTRING_ON_ARRAY');">Invocation of toString on an array&nbsp;&nbsp;
+            (1:
+            <span class="t-h">0/1/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="category-CORRECTNESS-and-code-USELESS_STRING-and-bug-DMI_INVOKING_TOSTRING_ON_ARRAY">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-af2ed05cbbc5bdfaba6bcfcc591572b6-0','c');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">USELESS_STRING: </span>In class com.ge.sample.Compress2</a>
+<div style="display:none;" id="b-uid-af2ed05cbbc5bdfaba6bcfcc591572b6-0-ph-c">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ob">
+<div class="ob-t">
+<a href="" onclick="toggle('category-EXPERIMENTAL');return false;">Experimental
+            (1:
+            <span class="t-h">0/1/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="category-EXPERIMENTAL">
+<div class="ib-1">
+<div class="ib-1-t">
+<a href="" onclick="toggle('category-EXPERIMENTAL-and-code-OBL');return false;">OBL: Unsatisfied obligation to clean up stream or resource
+            (1:
+            <span class="t-h">0/1/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="category-EXPERIMENTAL-and-code-OBL">
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('category-EXPERIMENTAL-and-code-OBL-and-bug-OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE');return false;" onmouseout="popUp(event,'tip-OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE');" onmouseover="popUp(event,'tip-OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE');">Method may fail to clean up stream or resource on checked exception&nbsp;&nbsp;
+            (1:
+            <span class="t-h">0/1/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="category-EXPERIMENTAL-and-code-OBL-and-bug-OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-68b8abf7c7e8f2a35c9a7d25e12b1405-0','c');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">OBL: </span>In class com.ge.sample.ZlibCompression</a>
+<div style="display:none;" id="b-uid-68b8abf7c7e8f2a35c9a7d25e12b1405-0-ph-c">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ob">
+<div class="ob-t">
+<a href="" onclick="toggle('category-I18N');return false;">Internationalization
+            (10:
+            <span class="t-h">10/0/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="category-I18N">
+<div class="ib-1">
+<div class="ib-1-t">
+<a href="" onclick="toggle('category-I18N-and-code-Dm');return false;">Dm: Dubious method used
+            (10:
+            <span class="t-h">10/0/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="category-I18N-and-code-Dm">
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('category-I18N-and-code-Dm-and-bug-DM_DEFAULT_ENCODING');return false;" onmouseout="popUp(event,'tip-DM_DEFAULT_ENCODING');" onmouseover="popUp(event,'tip-DM_DEFAULT_ENCODING');">Reliance on default encoding&nbsp;&nbsp;
+            (10:
+            <span class="t-h">10/0/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="category-I18N-and-code-Dm-and-bug-DM_DEFAULT_ENCODING">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-aa7fbef0b06d9526a7b30465243c5f84-0','c');return false;">
+<span class="b-1">&nbsp;&nbsp;</span>
+<span class="b-t">Dm: </span>In class com.ge.sample.Compress2</a>
+<div style="display:none;" id="b-uid-aa7fbef0b06d9526a7b30465243c5f84-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-40fc37f55f11bddcea87615579052769-0','c');return false;">
+<span class="b-1">&nbsp;&nbsp;</span>
+<span class="b-t">Dm: </span>In class com.ge.sample.CountLines</a>
+<div style="display:none;" id="b-uid-40fc37f55f11bddcea87615579052769-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-43d9fee3f3be0a63edd2dc8d8ef6a905-0','c');return false;">
+<span class="b-1">&nbsp;&nbsp;</span>
+<span class="b-t">Dm: </span>In class com.ge.sample.CountLines</a>
+<div style="display:none;" id="b-uid-43d9fee3f3be0a63edd2dc8d8ef6a905-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-198e286c54b29bf5ce05dea9389b8584-0','c');return false;">
+<span class="b-1">&nbsp;&nbsp;</span>
+<span class="b-t">Dm: </span>In class com.ge.sample.PrimeTest</a>
+<div style="display:none;" id="b-uid-198e286c54b29bf5ce05dea9389b8584-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-ac4c5017cf2707deaeeb9559713e55b0-0','c');return false;">
+<span class="b-1">&nbsp;&nbsp;</span>
+<span class="b-t">Dm: </span>In class com.ge.sample.StreamCompress</a>
+<div style="display:none;" id="b-uid-ac4c5017cf2707deaeeb9559713e55b0-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-f40e68bc75c451ebc69b13e69d8e029c-0','c');return false;">
+<span class="b-1">&nbsp;&nbsp;</span>
+<span class="b-t">Dm: </span>In class com.ge.sample.StreamCompress</a>
+<div style="display:none;" id="b-uid-f40e68bc75c451ebc69b13e69d8e029c-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-a4f6a9e48f422a164950ed7e64d7d6e0-0','c');return false;">
+<span class="b-1">&nbsp;&nbsp;</span>
+<span class="b-t">Dm: </span>In class com.ge.sample.TestFileSize</a>
+<div style="display:none;" id="b-uid-a4f6a9e48f422a164950ed7e64d7d6e0-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-69381ca33aecc10fbfc8b3baa2c35394-0','c');return false;">
+<span class="b-1">&nbsp;&nbsp;</span>
+<span class="b-t">Dm: </span>In class com.ge.sample.TestFileSize</a>
+<div style="display:none;" id="b-uid-69381ca33aecc10fbfc8b3baa2c35394-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-d248535c124c85c0c1627ecfca3b078b-0','c');return false;">
+<span class="b-1">&nbsp;&nbsp;</span>
+<span class="b-t">Dm: </span>In class com.ge.sample.ZlibCompression</a>
+<div style="display:none;" id="b-uid-d248535c124c85c0c1627ecfca3b078b-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-ad46f22665d83ea65f8c2f69a878d9f9-0','c');return false;">
+<span class="b-1">&nbsp;&nbsp;</span>
+<span class="b-t">Dm: </span>In class com.ge.sample.ZlibCompression</a>
+<div style="display:none;" id="b-uid-ad46f22665d83ea65f8c2f69a878d9f9-0-ph-c">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ob">
+<div class="ob-t">
+<a href="" onclick="toggle('category-MALICIOUS_CODE');return false;">Malicious code vulnerability
+            (1:
+            <span class="t-h">0/1/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="category-MALICIOUS_CODE">
+<div class="ib-1">
+<div class="ib-1-t">
+<a href="" onclick="toggle('category-MALICIOUS_CODE-and-code-MS');return false;">MS: Mutable static field
+            (1:
+            <span class="t-h">0/1/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="category-MALICIOUS_CODE-and-code-MS">
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('category-MALICIOUS_CODE-and-code-MS-and-bug-MS_PKGPROTECT');return false;" onmouseout="popUp(event,'tip-MS_PKGPROTECT');" onmouseover="popUp(event,'tip-MS_PKGPROTECT');">Field should be package protected&nbsp;&nbsp;
+            (1:
+            <span class="t-h">0/1/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="category-MALICIOUS_CODE-and-code-MS-and-bug-MS_PKGPROTECT">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-39525369006a23cd5883365a0a9b51d2-0','c');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">MS: </span>In class com.ge.sample.StreamCompress</a>
+<div style="display:none;" id="b-uid-39525369006a23cd5883365a0a9b51d2-0-ph-c">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ob">
+<div class="ob-t">
+<a href="" onclick="toggle('category-PERFORMANCE');return false;">Performance
+            (8:
+            <span class="t-h">2/6/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="category-PERFORMANCE">
+<div class="ib-1">
+<div class="ib-1-t">
+<a href="" onclick="toggle('category-PERFORMANCE-and-code-Bx');return false;">Bx: Questionable Boxing of primitive value
+            (5:
+            <span class="t-h">2/3/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="category-PERFORMANCE-and-code-Bx">
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('category-PERFORMANCE-and-code-Bx-and-bug-BX_UNBOXING_IMMEDIATELY_REBOXED');return false;" onmouseout="popUp(event,'tip-BX_UNBOXING_IMMEDIATELY_REBOXED');" onmouseover="popUp(event,'tip-BX_UNBOXING_IMMEDIATELY_REBOXED');">Boxed value is unboxed and then immediately reboxed&nbsp;&nbsp;
+            (3:
+            <span class="t-h">0/3/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="category-PERFORMANCE-and-code-Bx-and-bug-BX_UNBOXING_IMMEDIATELY_REBOXED">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-3051e6b278cbef92ea73b94e063df4d-0','c');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">Bx: </span>In class com.ge.sample.ReplaceWithMaxScan</a>
+<div style="display:none;" id="b-uid-3051e6b278cbef92ea73b94e063df4d-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-5ab3776253b603d2e39db040825be248-0','c');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">Bx: </span>In class com.ge.sample.ScanNumber</a>
+<div style="display:none;" id="b-uid-5ab3776253b603d2e39db040825be248-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-429619dda6376aba73035fe9bc405ef1-0','c');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">Bx: </span>In class com.ge.sample.TestingRanges</a>
+<div style="display:none;" id="b-uid-429619dda6376aba73035fe9bc405ef1-0-ph-c">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('category-PERFORMANCE-and-code-Bx-and-bug-DM_BOXED_PRIMITIVE_TOSTRING');return false;" onmouseout="popUp(event,'tip-DM_BOXED_PRIMITIVE_TOSTRING');" onmouseover="popUp(event,'tip-DM_BOXED_PRIMITIVE_TOSTRING');">Method allocates a boxed primitive just to call toString&nbsp;&nbsp;
+            (2:
+            <span class="t-h">2/0/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="category-PERFORMANCE-and-code-Bx-and-bug-DM_BOXED_PRIMITIVE_TOSTRING">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-e45bfb4edf5ad407aac3426d91a07adf-0','c');return false;">
+<span class="b-1">&nbsp;&nbsp;</span>
+<span class="b-t">Bx: </span>In class com.ge.sample.GetIntRange</a>
+<div style="display:none;" id="b-uid-e45bfb4edf5ad407aac3426d91a07adf-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-14d7aff129ada74600a46708e15abf5-0','c');return false;">
+<span class="b-1">&nbsp;&nbsp;</span>
+<span class="b-t">Bx: </span>In class com.ge.sample.GetRange</a>
+<div style="display:none;" id="b-uid-14d7aff129ada74600a46708e15abf5-0-ph-c">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ib-1">
+<div class="ib-1-t">
+<a href="" onclick="toggle('category-PERFORMANCE-and-code-Dm');return false;">Dm: Dubious method used
+            (2:
+            <span class="t-h">0/2/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="category-PERFORMANCE-and-code-Dm">
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('category-PERFORMANCE-and-code-Dm-and-bug-DM_NEXTINT_VIA_NEXTDOUBLE');return false;" onmouseout="popUp(event,'tip-DM_NEXTINT_VIA_NEXTDOUBLE');" onmouseover="popUp(event,'tip-DM_NEXTINT_VIA_NEXTDOUBLE');">Use the nextInt method of Random rather than nextDouble to generate a random integer&nbsp;&nbsp;
+            (1:
+            <span class="t-h">0/1/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="category-PERFORMANCE-and-code-Dm-and-bug-DM_NEXTINT_VIA_NEXTDOUBLE">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-689ccc06b96500d372b9aacef0652fff-0','c');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">Dm: </span>In class com.ge.sample.MoveCursor</a>
+<div style="display:none;" id="b-uid-689ccc06b96500d372b9aacef0652fff-0-ph-c">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('category-PERFORMANCE-and-code-Dm-and-bug-DM_STRING_CTOR');return false;" onmouseout="popUp(event,'tip-DM_STRING_CTOR');" onmouseover="popUp(event,'tip-DM_STRING_CTOR');">Method invokes inefficient new String(String) constructor&nbsp;&nbsp;
+            (1:
+            <span class="t-h">0/1/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="category-PERFORMANCE-and-code-Dm-and-bug-DM_STRING_CTOR">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-92be2bf365c70095cbf363ae7db0dcf4-0','c');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">Dm: </span>In class com.ge.sample.TestFileSize</a>
+<div style="display:none;" id="b-uid-92be2bf365c70095cbf363ae7db0dcf4-0-ph-c">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ib-1">
+<div class="ib-1-t">
+<a href="" onclick="toggle('category-PERFORMANCE-and-code-SBSC');return false;">SBSC: String concatenation in loop using + operator
+            (1:
+            <span class="t-h">0/1/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="category-PERFORMANCE-and-code-SBSC">
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('category-PERFORMANCE-and-code-SBSC-and-bug-SBSC_USE_STRINGBUFFER_CONCATENATION');return false;" onmouseout="popUp(event,'tip-SBSC_USE_STRINGBUFFER_CONCATENATION');" onmouseover="popUp(event,'tip-SBSC_USE_STRINGBUFFER_CONCATENATION');">Method concatenates strings using + in a loop&nbsp;&nbsp;
+            (1:
+            <span class="t-h">0/1/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="category-PERFORMANCE-and-code-SBSC-and-bug-SBSC_USE_STRINGBUFFER_CONCATENATION">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-d1c48fa4c565b30d1fffbd3a7139e20f-0','c');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">SBSC: </span>In class com.ge.sample.Console</a>
+<div style="display:none;" id="b-uid-d1c48fa4c565b30d1fffbd3a7139e20f-0-ph-c">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ob">
+<div class="ob-t">
+<a href="" onclick="toggle('category-STYLE');return false;">Dodgy code
+            (13:
+            <span class="t-h">0/13/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="category-STYLE">
+<div class="ib-1">
+<div class="ib-1-t">
+<a href="" onclick="toggle('category-STYLE-and-code-DLS');return false;">DLS: Dead local store
+            (4:
+            <span class="t-h">0/4/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="category-STYLE-and-code-DLS">
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('category-STYLE-and-code-DLS-and-bug-DLS_DEAD_LOCAL_STORE');return false;" onmouseout="popUp(event,'tip-DLS_DEAD_LOCAL_STORE');" onmouseover="popUp(event,'tip-DLS_DEAD_LOCAL_STORE');">Dead store to local variable&nbsp;&nbsp;
+            (4:
+            <span class="t-h">0/4/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="category-STYLE-and-code-DLS-and-bug-DLS_DEAD_LOCAL_STORE">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-19a26073453cf8d2aa79b8ebef42ffdb-0','c');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">DLS: </span>In class com.ge.sample.Compress2</a>
+<div style="display:none;" id="b-uid-19a26073453cf8d2aa79b8ebef42ffdb-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-77faf30804eafa4c7e7bd79de637172-0','c');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">DLS: </span>In class com.ge.sample.GetIntRange</a>
+<div style="display:none;" id="b-uid-77faf30804eafa4c7e7bd79de637172-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-c0599660ae10d976104b0b287103dcf2-0','c');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">DLS: </span>In class com.ge.sample.GetRange</a>
+<div style="display:none;" id="b-uid-c0599660ae10d976104b0b287103dcf2-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-49eef99ac4bf6fef5f303747a9de0988-0','c');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">DLS: </span>In class com.ge.sample.Test</a>
+<div style="display:none;" id="b-uid-49eef99ac4bf6fef5f303747a9de0988-0-ph-c">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ib-1">
+<div class="ib-1-t">
+<a href="" onclick="toggle('category-STYLE-and-code-DMI');return false;">DMI: Dubious method invocation
+            (9:
+            <span class="t-h">0/9/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="category-STYLE-and-code-DMI">
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('category-STYLE-and-code-DMI-and-bug-DMI_HARDCODED_ABSOLUTE_FILENAME');return false;" onmouseout="popUp(event,'tip-DMI_HARDCODED_ABSOLUTE_FILENAME');" onmouseover="popUp(event,'tip-DMI_HARDCODED_ABSOLUTE_FILENAME');">Code contains a hard coded reference to an absolute pathname&nbsp;&nbsp;
+            (9:
+            <span class="t-h">0/9/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="category-STYLE-and-code-DMI-and-bug-DMI_HARDCODED_ABSOLUTE_FILENAME">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-2e54dd56624ae61fdee8bc8db30ec82-0','c');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">DMI: </span>In class com.ge.sample.Builder</a>
+<div style="display:none;" id="b-uid-2e54dd56624ae61fdee8bc8db30ec82-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-649448a0bde1dde0ac617c3febf77472-0','c');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">DMI: </span>In class com.ge.sample.Builder</a>
+<div style="display:none;" id="b-uid-649448a0bde1dde0ac617c3febf77472-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-81cf342b7c33d998a20c5b0a3299c5ef-0','c');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">DMI: </span>In class com.ge.sample.CheckEnv</a>
+<div style="display:none;" id="b-uid-81cf342b7c33d998a20c5b0a3299c5ef-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-bebb66428ca0ad1441f83bb400240abc-0','c');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">DMI: </span>In class com.ge.sample.Compress</a>
+<div style="display:none;" id="b-uid-bebb66428ca0ad1441f83bb400240abc-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-86b151dd437e06998e5924349b4f5ab5-0','c');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">DMI: </span>In class com.ge.sample.StreamCompress</a>
+<div style="display:none;" id="b-uid-86b151dd437e06998e5924349b4f5ab5-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-3a141dde51aeed42da41cddc838b4f5e-0','c');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">DMI: </span>In class com.ge.sample.StreamCompress</a>
+<div style="display:none;" id="b-uid-3a141dde51aeed42da41cddc838b4f5e-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-e5335d8f5c5aee30460b670b145dc37c-0','c');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">DMI: </span>In class com.ge.sample.TestFileSize</a>
+<div style="display:none;" id="b-uid-e5335d8f5c5aee30460b670b145dc37c-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-f674c9189de1892b54ff29089e6c45e9-0','c');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">DMI: </span>In class com.ge.sample.ZlibCompression</a>
+<div style="display:none;" id="b-uid-f674c9189de1892b54ff29089e6c45e9-0-ph-c">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-ef36254943fda744daa5127c4d0f282b-0','c');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">DMI: </span>In class com.ge.sample.ZlibCompression</a>
+<div style="display:none;" id="b-uid-ef36254943fda744daa5127c4d0f282b-0-ph-c">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="list-by-package" class="data-box" style="display:none;">
+<span class="b-1">&nbsp;&nbsp;</span> High Prio
+   <span class="b-2">&nbsp;&nbsp;</span> Medium Prio
+   <span class="b-3">&nbsp;&nbsp;</span> Low Prio
+   <span class="b-4">&nbsp;&nbsp;</span> Exp.
+<div class="ob">
+<div class="ob-t">
+<a href="" onclick="toggle('package-com.ge.sample');return false;">com.ge.sample
+            (39:
+            <span class="t-h">15/24/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="package-com.ge.sample">
+<div class="ib-1">
+<div class="ib-1-t">
+<a href="" onclick="toggle('package-com.ge.sample-and-class-com.ge.sample.Builder');return false;">com.ge.sample.Builder  (2:
+            <span class="t-h">0/2/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="package-com.ge.sample-and-class-io.sudheer.practice.Builder">
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('package-com.ge.sample-and-class-com.ge.sample.Builder-and-type-DMI_HARDCODED_ABSOLUTE_FILENAME');return false;" onmouseout="popUp(event,'tip-DMI_HARDCODED_ABSOLUTE_FILENAME')" onmouseover="popUp(event,'tip-DMI_HARDCODED_ABSOLUTE_FILENAME')">Code contains a hard coded reference to an absolute pathname&nbsp;&nbsp;
+            (2)
+         </a>
+</div>
+<div style="display:none;" id="package-com.ge.sample-and-class-com.ge.sample.Builder-and-type-DMI_HARDCODED_ABSOLUTE_FILENAME">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-2e54dd56624ae61fdee8bc8db30ec82-0','p');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">DMI: </span>In class com.ge.sample.Builder</a>
+<div style="display:none;" id="b-uid-2e54dd56624ae61fdee8bc8db30ec82-0-ph-p">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-649448a0bde1dde0ac617c3febf77472-0','p');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">DMI: </span>In class com.ge.sample.Builder</a>
+<div style="display:none;" id="b-uid-649448a0bde1dde0ac617c3febf77472-0-ph-p">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ib-1">
+<div class="ib-1-t">
+<a href="" onclick="toggle('package-com.ge.sample-and-class-com.ge.sample.CheckEnv');return false;">com.ge.sample.CheckEnv  (1:
+            <span class="t-h">0/1/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="package-com.ge.sample-and-class-io.sudheer.practice.CheckEnv">
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('package-com.ge.sample-and-class-com.ge.sample.CheckEnv-and-type-DMI_HARDCODED_ABSOLUTE_FILENAME');return false;" onmouseout="popUp(event,'tip-DMI_HARDCODED_ABSOLUTE_FILENAME')" onmouseover="popUp(event,'tip-DMI_HARDCODED_ABSOLUTE_FILENAME')">Code contains a hard coded reference to an absolute pathname&nbsp;&nbsp;
+            (1)
+         </a>
+</div>
+<div style="display:none;" id="package-com.ge.sample-and-class-com.ge.sample.CheckEnv-and-type-DMI_HARDCODED_ABSOLUTE_FILENAME">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-81cf342b7c33d998a20c5b0a3299c5ef-0','p');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">DMI: </span>In class com.ge.sample.CheckEnv</a>
+<div style="display:none;" id="b-uid-81cf342b7c33d998a20c5b0a3299c5ef-0-ph-p">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ib-1">
+<div class="ib-1-t">
+<a href="" onclick="toggle('package-com.ge.sample-and-class-com.ge.sample.Compress');return false;">com.ge.sample.Compress  (1:
+            <span class="t-h">0/1/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="package-com.ge.sample-and-class-io.sudheer.practice.Compress">
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('package-com.ge.sample-and-class-com.ge.sample.Compress-and-type-DMI_HARDCODED_ABSOLUTE_FILENAME');return false;" onmouseout="popUp(event,'tip-DMI_HARDCODED_ABSOLUTE_FILENAME')" onmouseover="popUp(event,'tip-DMI_HARDCODED_ABSOLUTE_FILENAME')">Code contains a hard coded reference to an absolute pathname&nbsp;&nbsp;
+            (1)
+         </a>
+</div>
+<div style="display:none;" id="package-com.ge.sample-and-class-com.ge.sample.Compress-and-type-DMI_HARDCODED_ABSOLUTE_FILENAME">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-bebb66428ca0ad1441f83bb400240abc-0','p');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">DMI: </span>In class com.ge.sample.Compress</a>
+<div style="display:none;" id="b-uid-bebb66428ca0ad1441f83bb400240abc-0-ph-p">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ib-1">
+<div class="ib-1-t">
+<a href="" onclick="toggle('package-com.ge.sample-and-class-com.ge.sample.Compress2');return false;">com.ge.sample.Compress2  (3:
+            <span class="t-h">1/2/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="package-com.ge.sample-and-class-io.sudheer.practice.Compress2">
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('package-com.ge.sample-and-class-com.ge.sample.Compress2-and-type-DLS_DEAD_LOCAL_STORE');return false;" onmouseout="popUp(event,'tip-DLS_DEAD_LOCAL_STORE')" onmouseover="popUp(event,'tip-DLS_DEAD_LOCAL_STORE')">Dead store to local variable&nbsp;&nbsp;
+            (1)
+         </a>
+</div>
+<div style="display:none;" id="package-com.ge.sample-and-class-com.ge.sample.Compress2-and-type-DLS_DEAD_LOCAL_STORE">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-19a26073453cf8d2aa79b8ebef42ffdb-0','p');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">DLS: </span>In class com.ge.sample.Compress2</a>
+<div style="display:none;" id="b-uid-19a26073453cf8d2aa79b8ebef42ffdb-0-ph-p">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('package-com.ge.sample-and-class-com.ge.sample.Compress2-and-type-DM_DEFAULT_ENCODING');return false;" onmouseout="popUp(event,'tip-DM_DEFAULT_ENCODING')" onmouseover="popUp(event,'tip-DM_DEFAULT_ENCODING')">Reliance on default encoding&nbsp;&nbsp;
+            (1)
+         </a>
+</div>
+<div style="display:none;" id="package-com.ge.sample-and-class-com.ge.sample.Compress2-and-type-DM_DEFAULT_ENCODING">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-aa7fbef0b06d9526a7b30465243c5f84-0','p');return false;">
+<span class="b-1">&nbsp;&nbsp;</span>
+<span class="b-t">Dm: </span>In class com.ge.sample.Compress2</a>
+<div style="display:none;" id="b-uid-aa7fbef0b06d9526a7b30465243c5f84-0-ph-p">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('package-com.ge.sample-and-class-com.ge.sample.Compress2-and-type-DMI_INVOKING_TOSTRING_ON_ARRAY');return false;" onmouseout="popUp(event,'tip-DMI_INVOKING_TOSTRING_ON_ARRAY')" onmouseover="popUp(event,'tip-DMI_INVOKING_TOSTRING_ON_ARRAY')">Invocation of toString on an array&nbsp;&nbsp;
+            (1)
+         </a>
+</div>
+<div style="display:none;" id="package-com.ge.sample-and-class-com.ge.sample.Compress2-and-type-DMI_INVOKING_TOSTRING_ON_ARRAY">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-af2ed05cbbc5bdfaba6bcfcc591572b6-0','p');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">USELESS_STRING: </span>In class com.ge.sample.Compress2</a>
+<div style="display:none;" id="b-uid-af2ed05cbbc5bdfaba6bcfcc591572b6-0-ph-p">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ib-1">
+<div class="ib-1-t">
+<a href="" onclick="toggle('package-com.ge.sample-and-class-com.ge.sample.Console');return false;">com.ge.sample.Console  (1:
+            <span class="t-h">0/1/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="package-com.ge.sample-and-class-com.ge.sample.Console">
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('package-com.ge.sample-and-class-com.ge.sample.Console-and-type-SBSC_USE_STRINGBUFFER_CONCATENATION');return false;" onmouseout="popUp(event,'tip-SBSC_USE_STRINGBUFFER_CONCATENATION')" onmouseover="popUp(event,'tip-SBSC_USE_STRINGBUFFER_CONCATENATION')">Method concatenates strings using + in a loop&nbsp;&nbsp;
+            (1)
+         </a>
+</div>
+<div style="display:none;" id="package-com.ge.sample-and-class-com.ge.sample.Console-and-type-SBSC_USE_STRINGBUFFER_CONCATENATION">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-d1c48fa4c565b30d1fffbd3a7139e20f-0','p');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">SBSC: </span>In class com.ge.sample.Console</a>
+<div style="display:none;" id="b-uid-d1c48fa4c565b30d1fffbd3a7139e20f-0-ph-p">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ib-1">
+<div class="ib-1-t">
+<a href="" onclick="toggle('package-com.ge.sample-and-class-com.ge.sample.CountLines');return false;">com.ge.sample.CountLines  (3:
+            <span class="t-h">2/1/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="package-com.ge.sample-and-class-io.sudheer.practice.CountLines">
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('package-com.ge.sample-and-class-com.ge.sample.CountLines-and-type-DM_DEFAULT_ENCODING');return false;" onmouseout="popUp(event,'tip-DM_DEFAULT_ENCODING')" onmouseover="popUp(event,'tip-DM_DEFAULT_ENCODING')">Reliance on default encoding&nbsp;&nbsp;
+            (2)
+         </a>
+</div>
+<div style="display:none;" id="package-com.ge.sample-and-class-com.ge.sample.CountLines-and-type-DM_DEFAULT_ENCODING">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-40fc37f55f11bddcea87615579052769-0','p');return false;">
+<span class="b-1">&nbsp;&nbsp;</span>
+<span class="b-t">Dm: </span>In class com.ge.sample.CountLines</a>
+<div style="display:none;" id="b-uid-40fc37f55f11bddcea87615579052769-0-ph-p">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-43d9fee3f3be0a63edd2dc8d8ef6a905-0','p');return false;">
+<span class="b-1">&nbsp;&nbsp;</span>
+<span class="b-t">Dm: </span>In class com.ge.sample.CountLines</a>
+<div style="display:none;" id="b-uid-43d9fee3f3be0a63edd2dc8d8ef6a905-0-ph-p">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('package-com.ge.sample-and-class-com.ge.sample.CountLines-and-type-SR_NOT_CHECKED');return false;" onmouseout="popUp(event,'tip-SR_NOT_CHECKED')" onmouseover="popUp(event,'tip-SR_NOT_CHECKED')">Method ignores results of InputStream.skip()&nbsp;&nbsp;
+            (1)
+         </a>
+</div>
+<div style="display:none;" id="package-com.ge.sample-and-class-com.ge.sample.CountLines-and-type-SR_NOT_CHECKED">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-995fb2d021933364b75d7131f47ace7c-0','p');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">RR: </span>In class com.ge.sample.CountLines</a>
+<div style="display:none;" id="b-uid-995fb2d021933364b75d7131f47ace7c-0-ph-p">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ib-1">
+<div class="ib-1-t">
+<a href="" onclick="toggle('package-com.ge.sample-and-class-com.ge.sample.DateFormat');return false;">com.ge.sample.DateFormat  (1:
+            <span class="t-h">0/1/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="package-com.ge.sample-and-class-io.sudheer.practice.DateFormat">
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('package-com.ge.sample-and-class-com.ge.sample.DateFormat-and-type-NP_NULL_PARAM_DEREF');return false;" onmouseout="popUp(event,'tip-NP_NULL_PARAM_DEREF')" onmouseover="popUp(event,'tip-NP_NULL_PARAM_DEREF')">Method call passes null for non-null parameter&nbsp;&nbsp;
+            (1)
+         </a>
+</div>
+<div style="display:none;" id="package-com.ge.sample-and-class-com.ge.sample.DateFormat-and-type-NP_NULL_PARAM_DEREF">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-aa8cc9174a4bf9ac7792f8b5be577e1f-0','p');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">NP: </span>In class com.ge.sample.DateFormat</a>
+<div style="display:none;" id="b-uid-aa8cc9174a4bf9ac7792f8b5be577e1f-0-ph-p">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ib-1">
+<div class="ib-1-t">
+<a href="" onclick="toggle('package-com.ge.sample-and-class-com.ge.sample.GetIntRange');return false;">com.ge.sample.GetIntRange  (2:
+            <span class="t-h">1/1/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="package-com.ge.sample-and-class-io.sudheer.practice.GetIntRange">
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('package-com.ge.sample-and-class-com.ge.sample.GetIntRange-and-type-DLS_DEAD_LOCAL_STORE');return false;" onmouseout="popUp(event,'tip-DLS_DEAD_LOCAL_STORE')" onmouseover="popUp(event,'tip-DLS_DEAD_LOCAL_STORE')">Dead store to local variable&nbsp;&nbsp;
+            (1)
+         </a>
+</div>
+<div style="display:none;" id="package-com.ge.sample-and-class-com.ge.sample.GetIntRange-and-type-DLS_DEAD_LOCAL_STORE">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-77faf30804eafa4c7e7bd79de637172-0','p');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">DLS: </span>In class com.ge.sample.GetIntRange</a>
+<div style="display:none;" id="b-uid-77faf30804eafa4c7e7bd79de637172-0-ph-p">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('package-com.ge.sample-and-class-com.ge.sample.GetIntRange-and-type-DM_BOXED_PRIMITIVE_TOSTRING');return false;" onmouseout="popUp(event,'tip-DM_BOXED_PRIMITIVE_TOSTRING')" onmouseover="popUp(event,'tip-DM_BOXED_PRIMITIVE_TOSTRING')">Method allocates a boxed primitive just to call toString&nbsp;&nbsp;
+            (1)
+         </a>
+</div>
+<div style="display:none;" id="package-com.ge.sample-and-class-com.ge.sample.GetIntRange-and-type-DM_BOXED_PRIMITIVE_TOSTRING">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-e45bfb4edf5ad407aac3426d91a07adf-0','p');return false;">
+<span class="b-1">&nbsp;&nbsp;</span>
+<span class="b-t">Bx: </span>In class com.ge.sample.GetIntRange</a>
+<div style="display:none;" id="b-uid-e45bfb4edf5ad407aac3426d91a07adf-0-ph-p">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ib-1">
+<div class="ib-1-t">
+<a href="" onclick="toggle('package-com.ge.sample-and-class-com.ge.sample.GetRange');return false;">com.ge.sample.GetRange  (2:
+            <span class="t-h">1/1/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="package-com.ge.sample-and-class-io.sudheer.practice.GetRange">
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('package-com.ge.sample-and-class-com.ge.sample.GetRange-and-type-DLS_DEAD_LOCAL_STORE');return false;" onmouseout="popUp(event,'tip-DLS_DEAD_LOCAL_STORE')" onmouseover="popUp(event,'tip-DLS_DEAD_LOCAL_STORE')">Dead store to local variable&nbsp;&nbsp;
+            (1)
+         </a>
+</div>
+<div style="display:none;" id="package-com.ge.sample-and-class-com.ge.sample.GetRange-and-type-DLS_DEAD_LOCAL_STORE">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-c0599660ae10d976104b0b287103dcf2-0','p');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">DLS: </span>In class com.ge.sample.GetRange</a>
+<div style="display:none;" id="b-uid-c0599660ae10d976104b0b287103dcf2-0-ph-p">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('package-com.ge.sample-and-class-com.ge.sample.GetRange-and-type-DM_BOXED_PRIMITIVE_TOSTRING');return false;" onmouseout="popUp(event,'tip-DM_BOXED_PRIMITIVE_TOSTRING')" onmouseover="popUp(event,'tip-DM_BOXED_PRIMITIVE_TOSTRING')">Method allocates a boxed primitive just to call toString&nbsp;&nbsp;
+            (1)
+         </a>
+</div>
+<div style="display:none;" id="package-com.ge.sample-and-class-com.ge.sample.GetRange-and-type-DM_BOXED_PRIMITIVE_TOSTRING">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-14d7aff129ada74600a46708e15abf5-0','p');return false;">
+<span class="b-1">&nbsp;&nbsp;</span>
+<span class="b-t">Bx: </span>In class com.ge.sample.GetRange</a>
+<div style="display:none;" id="b-uid-14d7aff129ada74600a46708e15abf5-0-ph-p">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ib-1">
+<div class="ib-1-t">
+<a href="" onclick="toggle('package-com.ge.sample-and-class-com.ge.sample.MoveCursor');return false;">com.ge.sample.MoveCursor  (1:
+            <span class="t-h">0/1/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="package-com.ge.sample-and-class-io.sudheer.practice.MoveCursor">
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('package-com.ge.sample-and-class-com.ge.sample.MoveCursor-and-type-DM_NEXTINT_VIA_NEXTDOUBLE');return false;" onmouseout="popUp(event,'tip-DM_NEXTINT_VIA_NEXTDOUBLE')" onmouseover="popUp(event,'tip-DM_NEXTINT_VIA_NEXTDOUBLE')">Use the nextInt method of Random rather than nextDouble to generate a random integer&nbsp;&nbsp;
+            (1)
+         </a>
+</div>
+<div style="display:none;" id="package-com.ge.sample-and-class-com.ge.sample.MoveCursor-and-type-DM_NEXTINT_VIA_NEXTDOUBLE">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-689ccc06b96500d372b9aacef0652fff-0','p');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">Dm: </span>In class com.ge.sample.MoveCursor</a>
+<div style="display:none;" id="b-uid-689ccc06b96500d372b9aacef0652fff-0-ph-p">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ib-1">
+<div class="ib-1-t">
+<a href="" onclick="toggle('package-com.ge.sample-and-class-com.ge.sample.PrimeTest');return false;">com.ge.sample.PrimeTest  (3:
+            <span class="t-h">3/0/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="package-com.ge.sample-and-class-io.sudheer.practice.PrimeTest">
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('package-com.ge.sample-and-class-com.ge.sample.PrimeTest-and-type-DM_DEFAULT_ENCODING');return false;" onmouseout="popUp(event,'tip-DM_DEFAULT_ENCODING')" onmouseover="popUp(event,'tip-DM_DEFAULT_ENCODING')">Reliance on default encoding&nbsp;&nbsp;
+            (1)
+         </a>
+</div>
+<div style="display:none;" id="package-com.ge.sample-and-class-com.ge.sample.PrimeTest-and-type-DM_DEFAULT_ENCODING">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-198e286c54b29bf5ce05dea9389b8584-0','p');return false;">
+<span class="b-1">&nbsp;&nbsp;</span>
+<span class="b-t">Dm: </span>In class com.ge.sample.PrimeTest</a>
+<div style="display:none;" id="b-uid-198e286c54b29bf5ce05dea9389b8584-0-ph-p">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('package-com.ge.sample-and-class-com.ge.sample.PrimeTest-and-type-IL_INFINITE_LOOP');return false;" onmouseout="popUp(event,'tip-IL_INFINITE_LOOP')" onmouseover="popUp(event,'tip-IL_INFINITE_LOOP')">An apparent infinite loop&nbsp;&nbsp;
+            (2)
+         </a>
+</div>
+<div style="display:none;" id="package-com.ge.sample-and-class-com.ge.sample.PrimeTest-and-type-IL_INFINITE_LOOP">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-4fed553dff5c6cc42e0854d7e23cdf07-0','p');return false;">
+<span class="b-1">&nbsp;&nbsp;</span>
+<span class="b-t">IL: </span>In class com.ge.sample.PrimeTest</a>
+<div style="display:none;" id="b-uid-4fed553dff5c6cc42e0854d7e23cdf07-0-ph-p">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-14fbe1616103ddfb3154136f643cd92c-0','p');return false;">
+<span class="b-1">&nbsp;&nbsp;</span>
+<span class="b-t">IL: </span>In class com.ge.sample.PrimeTest</a>
+<div style="display:none;" id="b-uid-14fbe1616103ddfb3154136f643cd92c-0-ph-p">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ib-1">
+<div class="ib-1-t">
+<a href="" onclick="toggle('package-com.ge.sample-and-class-com.ge.sample.ReplaceWithMaxScan');return false;">com.ge.sample.ReplaceWithMaxScan  (1:
+            <span class="t-h">0/1/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="package-com.ge.sample-and-class-io.sudheer.practice.ReplaceWithMaxScan">
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('package-com.ge.sample-and-class-com.ge.sample.ReplaceWithMaxScan-and-type-BX_UNBOXING_IMMEDIATELY_REBOXED');return false;" onmouseout="popUp(event,'tip-BX_UNBOXING_IMMEDIATELY_REBOXED')" onmouseover="popUp(event,'tip-BX_UNBOXING_IMMEDIATELY_REBOXED')">Boxed value is unboxed and then immediately reboxed&nbsp;&nbsp;
+            (1)
+         </a>
+</div>
+<div style="display:none;" id="package-com.ge.sample-and-class-com.ge.sample.ReplaceWithMaxScan-and-type-BX_UNBOXING_IMMEDIATELY_REBOXED">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-3051e6b278cbef92ea73b94e063df4d-0','p');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">Bx: </span>In class com.ge.sample.ReplaceWithMaxScan</a>
+<div style="display:none;" id="b-uid-3051e6b278cbef92ea73b94e063df4d-0-ph-p">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ib-1">
+<div class="ib-1-t">
+<a href="" onclick="toggle('package-com.ge.sample-and-class-com.ge.sample.SbAppend');return false;">com.ge.sample.SbAppend  (1:
+            <span class="t-h">1/0/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="package-com.ge.sample-and-class-com.ge.sample.SbAppend">
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('package-com.ge.sample-and-class-com.ge.sample.SbAppend-and-type-NP_NULL_PARAM_DEREF_NONVIRTUAL');return false;" onmouseout="popUp(event,'tip-NP_NULL_PARAM_DEREF_NONVIRTUAL')" onmouseover="popUp(event,'tip-NP_NULL_PARAM_DEREF_NONVIRTUAL')">Non-virtual method call passes null for non-null parameter&nbsp;&nbsp;
+            (1)
+         </a>
+</div>
+<div style="display:none;" id="package-com.ge.sample-and-class-com.ge.sample.SbAppend-and-type-NP_NULL_PARAM_DEREF_NONVIRTUAL">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-2ba2bd6b800951b27a9a5ef69adfeb-0','p');return false;">
+<span class="b-1">&nbsp;&nbsp;</span>
+<span class="b-t">NP: </span>In class com.ge.sample.SbAppend</a>
+<div style="display:none;" id="b-uid-2ba2bd6b800951b27a9a5ef69adfeb-0-ph-p">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ib-1">
+<div class="ib-1-t">
+<a href="" onclick="toggle('package-com.ge.sample-and-class-com.ge.sample.ScanNumber');return false;">com.ge.sample.ScanNumber  (1:
+            <span class="t-h">0/1/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="package-com.ge.sample-and-class-io.sudheer.practice.ScanNumber">
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('package-com.ge.sample-and-class-com.ge.sample.ScanNumber-and-type-BX_UNBOXING_IMMEDIATELY_REBOXED');return false;" onmouseout="popUp(event,'tip-BX_UNBOXING_IMMEDIATELY_REBOXED')" onmouseover="popUp(event,'tip-BX_UNBOXING_IMMEDIATELY_REBOXED')">Boxed value is unboxed and then immediately reboxed&nbsp;&nbsp;
+            (1)
+         </a>
+</div>
+<div style="display:none;" id="package-com.ge.sample-and-class-com.ge.sample.ScanNumber-and-type-BX_UNBOXING_IMMEDIATELY_REBOXED">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-5ab3776253b603d2e39db040825be248-0','p');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">Bx: </span>In class com.ge.sample.ScanNumber</a>
+<div style="display:none;" id="b-uid-5ab3776253b603d2e39db040825be248-0-ph-p">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ib-1">
+<div class="ib-1-t">
+<a href="" onclick="toggle('package-com.ge.sample-and-class-com.ge.sample.StreamCompress');return false;">com.ge.sample.StreamCompress  (5:
+            <span class="t-h">2/3/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="package-com.ge.sample-and-class-io.sudheer.practice.StreamCompress">
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('package-com.ge.sample-and-class-com.ge.sample.StreamCompress-and-type-DM_DEFAULT_ENCODING');return false;" onmouseout="popUp(event,'tip-DM_DEFAULT_ENCODING')" onmouseover="popUp(event,'tip-DM_DEFAULT_ENCODING')">Reliance on default encoding&nbsp;&nbsp;
+            (2)
+         </a>
+</div>
+<div style="display:none;" id="package-com.ge.sample-and-class-com.ge.sample.StreamCompress-and-type-DM_DEFAULT_ENCODING">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-ac4c5017cf2707deaeeb9559713e55b0-0','p');return false;">
+<span class="b-1">&nbsp;&nbsp;</span>
+<span class="b-t">Dm: </span>In class com.ge.sample.StreamCompress</a>
+<div style="display:none;" id="b-uid-ac4c5017cf2707deaeeb9559713e55b0-0-ph-p">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-f40e68bc75c451ebc69b13e69d8e029c-0','p');return false;">
+<span class="b-1">&nbsp;&nbsp;</span>
+<span class="b-t">Dm: </span>In class com.ge.sample.StreamCompress</a>
+<div style="display:none;" id="b-uid-f40e68bc75c451ebc69b13e69d8e029c-0-ph-p">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('package-com.ge.sample-and-class-com.ge.sample.StreamCompress-and-type-DMI_HARDCODED_ABSOLUTE_FILENAME');return false;" onmouseout="popUp(event,'tip-DMI_HARDCODED_ABSOLUTE_FILENAME')" onmouseover="popUp(event,'tip-DMI_HARDCODED_ABSOLUTE_FILENAME')">Code contains a hard coded reference to an absolute pathname&nbsp;&nbsp;
+            (2)
+         </a>
+</div>
+<div style="display:none;" id="package-com.ge.sample-and-class-com.ge.sample.StreamCompress-and-type-DMI_HARDCODED_ABSOLUTE_FILENAME">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-86b151dd437e06998e5924349b4f5ab5-0','p');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">DMI: </span>In class com.ge.sample.StreamCompress</a>
+<div style="display:none;" id="b-uid-86b151dd437e06998e5924349b4f5ab5-0-ph-p">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-3a141dde51aeed42da41cddc838b4f5e-0','p');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">DMI: </span>In class com.ge.sample.StreamCompress</a>
+<div style="display:none;" id="b-uid-3a141dde51aeed42da41cddc838b4f5e-0-ph-p">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('package-com.ge.sample-and-class-com.ge.sample.StreamCompress-and-type-MS_PKGPROTECT');return false;" onmouseout="popUp(event,'tip-MS_PKGPROTECT')" onmouseover="popUp(event,'tip-MS_PKGPROTECT')">Field should be package protected&nbsp;&nbsp;
+            (1)
+         </a>
+</div>
+<div style="display:none;" id="package-com.ge.sample-and-class-com.ge.sample.StreamCompress-and-type-MS_PKGPROTECT">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-39525369006a23cd5883365a0a9b51d2-0','p');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">MS: </span>In class com.ge.sample.StreamCompress</a>
+<div style="display:none;" id="b-uid-39525369006a23cd5883365a0a9b51d2-0-ph-p">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ib-1">
+<div class="ib-1-t">
+<a href="" onclick="toggle('package-com.ge.sample-and-class-com.ge.sample.Test');return false;">com.ge.sample.Test  (1:
+            <span class="t-h">0/1/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="package-com.ge.sample-and-class-com.ge.sample.Test">
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('package-com.ge.sample-and-class-com.ge.sample.Test-and-type-DLS_DEAD_LOCAL_STORE');return false;" onmouseout="popUp(event,'tip-DLS_DEAD_LOCAL_STORE')" onmouseover="popUp(event,'tip-DLS_DEAD_LOCAL_STORE')">Dead store to local variable&nbsp;&nbsp;
+            (1)
+         </a>
+</div>
+<div style="display:none;" id="package-com.ge.sample-and-class-com.ge.sample.Test-and-type-DLS_DEAD_LOCAL_STORE">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-49eef99ac4bf6fef5f303747a9de0988-0','p');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">DLS: </span>In class com.ge.sample.Test</a>
+<div style="display:none;" id="b-uid-49eef99ac4bf6fef5f303747a9de0988-0-ph-p">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ib-1">
+<div class="ib-1-t">
+<a href="" onclick="toggle('package-com.ge.sample-and-class-com.ge.sample.TestFileSize');return false;">com.ge.sample.TestFileSize  (4:
+            <span class="t-h">2/2/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="package-com.ge.sample-and-class-io.sudheer.practice.TestFileSize">
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('package-com.ge.sample-and-class-com.ge.sample.TestFileSize-and-type-DM_DEFAULT_ENCODING');return false;" onmouseout="popUp(event,'tip-DM_DEFAULT_ENCODING')" onmouseover="popUp(event,'tip-DM_DEFAULT_ENCODING')">Reliance on default encoding&nbsp;&nbsp;
+            (2)
+         </a>
+</div>
+<div style="display:none;" id="package-com.ge.sample-and-class-com.ge.sample.TestFileSize-and-type-DM_DEFAULT_ENCODING">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-a4f6a9e48f422a164950ed7e64d7d6e0-0','p');return false;">
+<span class="b-1">&nbsp;&nbsp;</span>
+<span class="b-t">Dm: </span>In class com.ge.sample.TestFileSize</a>
+<div style="display:none;" id="b-uid-a4f6a9e48f422a164950ed7e64d7d6e0-0-ph-p">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-69381ca33aecc10fbfc8b3baa2c35394-0','p');return false;">
+<span class="b-1">&nbsp;&nbsp;</span>
+<span class="b-t">Dm: </span>In class com.ge.sample.TestFileSize</a>
+<div style="display:none;" id="b-uid-69381ca33aecc10fbfc8b3baa2c35394-0-ph-p">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('package-com.ge.sample-and-class-com.ge.sample.TestFileSize-and-type-DM_STRING_CTOR');return false;" onmouseout="popUp(event,'tip-DM_STRING_CTOR')" onmouseover="popUp(event,'tip-DM_STRING_CTOR')">Method invokes inefficient new String(String) constructor&nbsp;&nbsp;
+            (1)
+         </a>
+</div>
+<div style="display:none;" id="package-com.ge.sample-and-class-com.ge.sample.TestFileSize-and-type-DM_STRING_CTOR">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-92be2bf365c70095cbf363ae7db0dcf4-0','p');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">Dm: </span>In class com.ge.sample.TestFileSize</a>
+<div style="display:none;" id="b-uid-92be2bf365c70095cbf363ae7db0dcf4-0-ph-p">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('package-com.ge.sample-and-class-com.ge.sample.TestFileSize-and-type-DMI_HARDCODED_ABSOLUTE_FILENAME');return false;" onmouseout="popUp(event,'tip-DMI_HARDCODED_ABSOLUTE_FILENAME')" onmouseover="popUp(event,'tip-DMI_HARDCODED_ABSOLUTE_FILENAME')">Code contains a hard coded reference to an absolute pathname&nbsp;&nbsp;
+            (1)
+         </a>
+</div>
+<div style="display:none;" id="package-com.ge.sample-and-class-com.ge.sample.TestFileSize-and-type-DMI_HARDCODED_ABSOLUTE_FILENAME">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-e5335d8f5c5aee30460b670b145dc37c-0','p');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">DMI: </span>In class com.ge.sample.TestFileSize</a>
+<div style="display:none;" id="b-uid-e5335d8f5c5aee30460b670b145dc37c-0-ph-p">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ib-1">
+<div class="ib-1-t">
+<a href="" onclick="toggle('package-com.ge.sample-and-class-com.ge.sample.TestingRanges');return false;">com.ge.sample.TestingRanges  (1:
+            <span class="t-h">0/1/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="package-com.ge.sample-and-class-io.sudheer.practice.TestingRanges">
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('package-com.ge.sample-and-class-com.ge.sample.TestingRanges-and-type-BX_UNBOXING_IMMEDIATELY_REBOXED');return false;" onmouseout="popUp(event,'tip-BX_UNBOXING_IMMEDIATELY_REBOXED')" onmouseover="popUp(event,'tip-BX_UNBOXING_IMMEDIATELY_REBOXED')">Boxed value is unboxed and then immediately reboxed&nbsp;&nbsp;
+            (1)
+         </a>
+</div>
+<div style="display:none;" id="package-com.ge.sample-and-class-com.ge.sample.TestingRanges-and-type-BX_UNBOXING_IMMEDIATELY_REBOXED">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-429619dda6376aba73035fe9bc405ef1-0','p');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">Bx: </span>In class com.ge.sample.TestingRanges</a>
+<div style="display:none;" id="b-uid-429619dda6376aba73035fe9bc405ef1-0-ph-p">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="ib-1">
+<div class="ib-1-t">
+<a href="" onclick="toggle('package-com.ge.sample-and-class-com.ge.sample.ZlibCompression');return false;">com.ge.sample.ZlibCompression  (5:
+            <span class="t-h">2/3/0/0</span>)
+         </a>
+</div>
+<div style="display:none;" id="package-com.ge.sample-and-class-io.sudheer.practice.ZlibCompression">
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('package-com.ge.sample-and-class-com.ge.sample.ZlibCompression-and-type-DM_DEFAULT_ENCODING');return false;" onmouseout="popUp(event,'tip-DM_DEFAULT_ENCODING')" onmouseover="popUp(event,'tip-DM_DEFAULT_ENCODING')">Reliance on default encoding&nbsp;&nbsp;
+            (2)
+         </a>
+</div>
+<div style="display:none;" id="package-com.ge.sample-and-class-com.ge.sample.ZlibCompression-and-type-DM_DEFAULT_ENCODING">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-d248535c124c85c0c1627ecfca3b078b-0','p');return false;">
+<span class="b-1">&nbsp;&nbsp;</span>
+<span class="b-t">Dm: </span>In class com.ge.sample.ZlibCompression</a>
+<div style="display:none;" id="b-uid-d248535c124c85c0c1627ecfca3b078b-0-ph-p">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-ad46f22665d83ea65f8c2f69a878d9f9-0','p');return false;">
+<span class="b-1">&nbsp;&nbsp;</span>
+<span class="b-t">Dm: </span>In class com.ge.sample.ZlibCompression</a>
+<div style="display:none;" id="b-uid-ad46f22665d83ea65f8c2f69a878d9f9-0-ph-p">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('package-com.ge.sample-and-class-com.ge.sample.ZlibCompression-and-type-DMI_HARDCODED_ABSOLUTE_FILENAME');return false;" onmouseout="popUp(event,'tip-DMI_HARDCODED_ABSOLUTE_FILENAME')" onmouseover="popUp(event,'tip-DMI_HARDCODED_ABSOLUTE_FILENAME')">Code contains a hard coded reference to an absolute pathname&nbsp;&nbsp;
+            (2)
+         </a>
+</div>
+<div style="display:none;" id="package-com.ge.sample-and-class-com.ge.sample.ZlibCompression-and-type-DMI_HARDCODED_ABSOLUTE_FILENAME">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-f674c9189de1892b54ff29089e6c45e9-0','p');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">DMI: </span>In class com.ge.sample.ZlibCompression</a>
+<div style="display:none;" id="b-uid-f674c9189de1892b54ff29089e6c45e9-0-ph-p">
+         loading...
+      </div>
+</div>
+<div class="bb">
+<a href="" onclick="showbug('b-uid-ef36254943fda744daa5127c4d0f282b-0','p');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">DMI: </span>In class com.ge.sample.ZlibCompression</a>
+<div style="display:none;" id="b-uid-ef36254943fda744daa5127c4d0f282b-0-ph-p">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+<div class="ib-2">
+<div class="ib-2-t">
+<a href="" onclick="toggle('package-com.ge.sample-and-class-com.ge.sample.ZlibCompression-and-type-OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE');return false;" onmouseout="popUp(event,'tip-OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE')" onmouseover="popUp(event,'tip-OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE')">Method may fail to clean up stream or resource on checked exception&nbsp;&nbsp;
+            (1)
+         </a>
+</div>
+<div style="display:none;" id="package-com.ge.sample-and-class-com.ge.sample.ZlibCompression-and-type-OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE">
+<div class="bb">
+<a href="" onclick="showbug('b-uid-68b8abf7c7e8f2a35c9a7d25e12b1405-0','p');return false;">
+<span class="b-2">&nbsp;&nbsp;</span>
+<span class="b-t">OBL: </span>In class com.ge.sample.ZlibCompression</a>
+<div style="display:none;" id="b-uid-68b8abf7c7e8f2a35c9a7d25e12b1405-0-ph-p">
+         loading...
+      </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="tip-DM_NEXTINT_VIA_NEXTDOUBLE" class="tip">
+<b>Dm / DM_NEXTINT_VIA_NEXTDOUBLE</b>
+<br/>
+
+  <p>If <code>r</code> is a <code>java.util.Random</code>, you can generate a random number from <code>0</code> to <code>n-1</code>
+using <code>r.nextInt(n)</code>, rather than using <code>(int)(r.nextDouble() * n)</code>.
+</p>
+<p>The argument to nextInt must be positive. If, for example, you want to generate a random
+value from -99 to 0, use <code>-r.nextInt(100)</code>.
+</p>
+
+    </div>
+<div id="tip-DM_STRING_CTOR" class="tip">
+<b>Dm / DM_STRING_CTOR</b>
+<br/>
+
+  <p> Using the <code>java.lang.String(String)</code> constructor wastes memory
+  because the object so constructed will be functionally indistinguishable
+  from the <code>String</code> passed as a parameter.&nbsp; Just use the
+  argument <code>String</code> directly.</p>
+
+    </div>
+<div id="tip-SR_NOT_CHECKED" class="tip">
+<b>RR / SR_NOT_CHECKED</b>
+<br/>
+
+  <p> This method ignores the return value of
+  <code>java.io.InputStream.skip()</code> which can skip multiple bytes.&nbsp;
+  If the return value is not checked, the caller will not be able to correctly
+  handle the case where fewer bytes were skipped than the caller requested.&nbsp;
+  This is a particularly insidious kind of bug, because in many programs,
+  skips from input streams usually do skip the full amount of data requested,
+  causing the program to fail only sporadically. With Buffered streams, however,
+  skip() will only skip data in the buffer, and will routinely fail to skip the
+  requested number of bytes.</p>
+
+    </div>
+<div id="tip-NP_NULL_PARAM_DEREF_NONVIRTUAL" class="tip">
+<b>NP / NP_NULL_PARAM_DEREF_NONVIRTUAL</b>
+<br/>
+      
+      <p>
+      A possibly-null value is passed to a non-null method parameter.
+    Either the parameter is annotated as a parameter that should
+    always be non-null, or analysis has shown that it will always be
+    dereferenced.
+      </p>
+      
+   </div>
+<div id="tip-BX_UNBOXING_IMMEDIATELY_REBOXED" class="tip">
+<b>Bx / BX_UNBOXING_IMMEDIATELY_REBOXED</b>
+<br/>
+
+  <p>A boxed value is unboxed and then immediately reboxed.
+</p>
+
+    </div>
+<div id="tip-DMI_INVOKING_TOSTRING_ON_ARRAY" class="tip">
+<b>USELESS_STRING / DMI_INVOKING_TOSTRING_ON_ARRAY</b>
+<br/>
+
+<p>
+The code invokes toString on an array, which will generate a fairly useless result
+such as [C@16f0472. Consider using Arrays.toString to convert the array into a readable
+String that gives the contents of the array. See Programming Puzzlers, chapter 3, puzzle 12.
+</p>
+
+    </div>
+<div id="tip-DMI_HARDCODED_ABSOLUTE_FILENAME" class="tip">
+<b>DMI / DMI_HARDCODED_ABSOLUTE_FILENAME</b>
+<br/>
+
+<p>This code constructs a File object using a hard coded to an absolute pathname
+(e.g., <code>new File("/home/dannyc/workspace/j2ee/src/share/com/sun/enterprise/deployment");</code>
+</p>
+
+    </div>
+<div id="tip-OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE" class="tip">
+<b>OBL / OBL_UNSATISFIED_OBLIGATION_EXCEPTION_EDGE</b>
+<br/>
+          
+          <p>
+          This method may fail to clean up (close, dispose of) a stream,
+          database object, or other
+          resource requiring an explicit cleanup operation.
+          </p>
+
+          <p>
+          In general, if a method opens a stream or other resource,
+          the method should use a try/finally block to ensure that
+          the stream or resource is cleaned up before the method
+          returns.
+          </p>
+
+          <p>
+          This bug pattern is essentially the same as the
+          OS_OPEN_STREAM and ODR_OPEN_DATABASE_RESOURCE
+          bug patterns, but is based on a different
+          (and hopefully better) static analysis technique.
+          We are interested is getting feedback about the
+          usefulness of this bug pattern.
+          To send feedback, either:
+          </p>
+          <ul>
+            <li>send email to findbugs@cs.umd.edu</li>
+            <li>file a bug report: <a href="http://findbugs.sourceforge.net/reportingBugs.html">http://findbugs.sourceforge.net/reportingBugs.html</a></li>
+          </ul>
+
+          <p>
+          In particular,
+          the false-positive suppression heuristics for this
+          bug pattern have not been extensively tuned, so
+          reports about false positives are helpful to us.
+          </p>
+
+          <p>
+          See Weimer and Necula, <i>Finding and Preventing Run-Time Error Handling Mistakes</i>, for
+          a description of the analysis technique.
+          </p>
+          
+      </div>
+<div id="tip-DM_DEFAULT_ENCODING" class="tip">
+<b>Dm / DM_DEFAULT_ENCODING</b>
+<br/>
+
+<p> Found a call to a method which will perform a byte to String (or String to byte) conversion, and will assume that the default platform encoding is suitable. This will cause the application behaviour to vary between platforms. Use an alternative API and specify a charset name or Charset object explicitly.  </p>
+
+      </div>
+<div id="tip-IL_INFINITE_LOOP" class="tip">
+<b>IL / IL_INFINITE_LOOP</b>
+<br/>
+
+<p>This loop doesn't seem to have a way to terminate (other than by perhaps
+throwing an exception).</p>
+
+    </div>
+<div id="tip-MS_PKGPROTECT" class="tip">
+<b>MS / MS_PKGPROTECT</b>
+<br/>
+
+  <p> A mutable static field could be changed by malicious code or
+   by accident.
+   The field could be made package protected to avoid
+   this vulnerability.</p>
+
+    </div>
+<div id="tip-NP_NULL_PARAM_DEREF" class="tip">
+<b>NP / NP_NULL_PARAM_DEREF</b>
+<br/>
+      
+      <p>
+      This method call passes a null value for a non-null method parameter.
+    Either the parameter is annotated as a parameter that should
+    always be non-null, or analysis has shown that it will always be
+    dereferenced.
+      </p>
+      
+   </div>
+<div id="tip-SBSC_USE_STRINGBUFFER_CONCATENATION" class="tip">
+<b>SBSC / SBSC_USE_STRINGBUFFER_CONCATENATION</b>
+<br/>
+
+<p> The method seems to be building a String using concatenation in a loop.
+In each iteration, the String is converted to a StringBuffer/StringBuilder,
+   appended to, and converted back to a String.
+   This can lead to a cost quadratic in the number of iterations,
+   as the growing string is recopied in each iteration. </p>
+
+<p>Better performance can be obtained by using
+a StringBuffer (or StringBuilder in Java 1.5) explicitly.</p>
+
+<p> For example:</p>
+<pre>
+  // This is bad
+  String s = "";
+  for (int i = 0; i &lt; field.length; ++i) {
+    s = s + field[i];
+  }
+
+  // This is better
+  StringBuffer buf = new StringBuffer();
+  for (int i = 0; i &lt; field.length; ++i) {
+    buf.append(field[i]);
+  }
+  String s = buf.toString();
+</pre>
+
+    </div>
+<div id="tip-DLS_DEAD_LOCAL_STORE" class="tip">
+<b>DLS / DLS_DEAD_LOCAL_STORE</b>
+<br/>
+
+<p>
+This instruction assigns a value to a local variable,
+but the value is not read or used in any subsequent instruction.
+Often, this indicates an error, because the value computed is never
+used.
+</p>
+<p>
+Note that Sun's javac compiler often generates dead stores for
+final local variables.  Because FindBugs is a bytecode-based tool,
+there is no easy way to eliminate these false positives.
+</p>
+
+    </div>
+<div id="tip-DM_BOXED_PRIMITIVE_TOSTRING" class="tip">
+<b>Bx / DM_BOXED_PRIMITIVE_TOSTRING</b>
+<br/>
+
+  <p>A boxed primitive is allocated just to call toString(). It is more effective to just use the static
+  form of toString which takes the primitive value. So,</p>
+  <table>
+     <tr><th>Replace...</th><th>With this...</th></tr>
+     <tr><td>new Integer(1).toString()</td><td>Integer.toString(1)</td></tr>
+     <tr><td>new Long(1).toString()</td><td>Long.toString(1)</td></tr>
+     <tr><td>new Float(1.0).toString()</td><td>Float.toString(1.0)</td></tr>
+     <tr><td>new Double(1.0).toString()</td><td>Double.toString(1.0)</td></tr>
+     <tr><td>new Byte(1).toString()</td><td>Byte.toString(1)</td></tr>
+     <tr><td>new Short(1).toString()</td><td>Short.toString(1)</td></tr>
+     <tr><td>new Boolean(true).toString()</td><td>Boolean.toString(true)</td></tr>
+  </table>
+
+    </div>
+<div style="display:none;" id="b-uid-2e54dd56624ae61fdee8bc8db30ec82-0">
+<div class="b-r">In class io.sudheer.practice.Builder</div>
+<div class="b-r">In method io.sudheer.practice.Builder.main(String[])</div>
+<div class="b-r">File name D:/gegdc/SV40298/jboss4.0.3/server/default/log/opt/shared/data/tdmdataaccess/temp/javaOut.tzf</div>
+<div class="b-r">At Builder.java:[line 18]</div>
+<div class="b-d">Hard coded reference to an absolute pathname in io.sudheer.practice.Builder.main(String[])</div>
+</div>
+<div style="display:none;" id="b-uid-649448a0bde1dde0ac617c3febf77472-0">
+<div class="b-r">In class io.sudheer.practice.Builder</div>
+<div class="b-r">In method io.sudheer.practice.Builder.main(String[])</div>
+<div class="b-r">File name D:/gegdc/SV40298/jboss4.0.3/server/default/log/opt/shared/data/tdmdataaccess/temp/javaOut2.tzf</div>
+<div class="b-r">At Builder.java:[line 17]</div>
+<div class="b-d">Hard coded reference to an absolute pathname in io.sudheer.practice.Builder.main(String[])</div>
+</div>
+<div style="display:none;" id="b-uid-81cf342b7c33d998a20c5b0a3299c5ef-0">
+<div class="b-r">In class io.sudheer.practice.CheckEnv</div>
+<div class="b-r">In method io.sudheer.practice.CheckEnv.main(String[])</div>
+<div class="b-r">File name D://gegdc//SV40298//WorkSpace//sample//src//environment.xml</div>
+<div class="b-r">At CheckEnv.java:[line 27]</div>
+<div class="b-d">Hard coded reference to an absolute pathname in io.sudheer.practice.CheckEnv.main(String[])</div>
+</div>
+<div style="display:none;" id="b-uid-bebb66428ca0ad1441f83bb400240abc-0">
+<div class="b-r">In class io.sudheer.practice.Compress</div>
+<div class="b-r">In method io.sudheer.practice.Compress.main(String[])</div>
+<div class="b-r">File name D:/gegdc/SV40298/tmp/1.gzip</div>
+<div class="b-r">At Compress.java:[line 20]</div>
+<div class="b-d">Hard coded reference to an absolute pathname in io.sudheer.practice.Compress.main(String[])</div>
+</div>
+<div style="display:none;" id="b-uid-19a26073453cf8d2aa79b8ebef42ffdb-0">
+<div class="b-r">In class io.sudheer.practice.Compress2</div>
+<div class="b-r">In method io.sudheer.practice.Compress2.main(String[])</div>
+<div class="b-r">Local variable named b</div>
+<div class="b-r">At Compress2.java:[line 25]</div>
+<div class="b-d">Dead store to b in io.sudheer.practice.Compress2.main(String[])</div>
+</div>
+<div style="display:none;" id="b-uid-af2ed05cbbc5bdfaba6bcfcc591572b6-0">
+<div class="b-r">In class io.sudheer.practice.Compress2</div>
+<div class="b-r">In method io.sudheer.practice.Compress2.compress(byte[])</div>
+<div class="b-r">Local variable named bytesCompressed</div>
+<div class="b-r">At Compress2.java:[line 57]</div>
+<div class="b-d">Invocation of toString on bytesCompressed in io.sudheer.practice.Compress2.compress(byte[])</div>
+</div>
+<div style="display:none;" id="b-uid-aa7fbef0b06d9526a7b30465243c5f84-0">
+<div class="b-r">In class io.sudheer.practice.Compress2</div>
+<div class="b-r">In method io.sudheer.practice.Compress2.main(String[])</div>
+<div class="b-r">Called method String.getBytes()</div>
+<div class="b-r">At Compress2.java:[line 25]</div>
+<div class="b-d">Found reliance on default encoding in io.sudheer.practice.Compress2.main(String[]): String.getBytes()</div>
+</div>
+<div style="display:none;" id="b-uid-d1c48fa4c565b30d1fffbd3a7139e20f-0">
+<div class="b-r">In class com.ge.sample.Console</div>
+<div class="b-r">In method com.ge.sample.Console.writeBytesAsHexadecimal(byte[])</div>
+<div class="b-r">At CompressionTest.java:[line 189]</div>
+<div class="b-d">com.ge.sample.Console.writeBytesAsHexadecimal(byte[]) concatenates strings using + in a loop</div>
+</div>
+<div style="display:none;" id="b-uid-40fc37f55f11bddcea87615579052769-0">
+<div class="b-r">In class io.sudheer.practice.CountLines</div>
+<div class="b-r">In method io.sudheer.practice.CountLines.countLines(String, String)</div>
+<div class="b-r">Called method new java.io.FileReader(String)</div>
+<div class="b-r">At CountLines.java:[line 31]</div>
+<div class="b-d">Found reliance on default encoding in io.sudheer.practice.CountLines.countLines(String, String): new
+    java.io.FileReader(String)</div>
+</div>
+<div style="display:none;" id="b-uid-43d9fee3f3be0a63edd2dc8d8ef6a905-0">
+<div class="b-r">In class io.sudheer.practice.CountLines</div>
+<div class="b-r">In method io.sudheer.practice.CountLines.countLinesUsingProcess(String)</div>
+<div class="b-r">Called method new java.io.FileReader(File)</div>
+<div class="b-r">At CountLines.java:[line 43]</div>
+<div class="b-d">Found reliance on default encoding in io.sudheer.practice.CountLines.countLinesUsingProcess(String):
+    new java.io.FileReader(File)</div>
+</div>
+<div style="display:none;" id="b-uid-995fb2d021933364b75d7131f47ace7c-0">
+<div class="b-r">In class io.sudheer.practice.CountLines</div>
+<div class="b-r">In method io.sudheer.practice.CountLines.countLinesUsingProcess(String)</div>
+<div class="b-r">Called method java.io.LineNumberReader.skip(long)</div>
+<div class="b-r">At CountLines.java:[line 44]</div>
+<div class="b-d">io.sudheer.practice.CountLines.countLinesUsingProcess(String) ignores result of
+    java.io.LineNumberReader.skip(long)</div>
+</div>
+<div style="display:none;" id="b-uid-aa8cc9174a4bf9ac7792f8b5be577e1f-0">
+<div class="b-r">In class io.sudheer.practice.DateFormat</div>
+<div class="b-r">In method io.sudheer.practice.DateFormat.main(String[])</div>
+<div class="b-r">Called method java.util.Calendar.setTime(Date)</div>
+<div class="b-r">Argument 1 might be null but must not be null</div>
+<div class="b-r">Value loaded from date</div>
+<div class="b-r">Method invoked at DateFormat.java:[line 35]</div>
+<div class="b-r">Null value at DateFormat.java:[line 25]</div>
+<div class="b-r">Known null at DateFormat.java:[line 28]</div>
+<div class="b-r">Known null at DateFormat.java:[line 30]</div>
+<div class="b-d">Null passed for non-null parameter of java.util.Calendar.setTime(Date) in
+    io.sudheer.practice.DateFormat.main(String[])</div>
+</div>
+<div style="display:none;" id="b-uid-77faf30804eafa4c7e7bd79de637172-0">
+<div class="b-r">In class io.sudheer.practice.GetIntRange</div>
+<div class="b-r">In method io.sudheer.practice.GetIntRange.proceedForTokens(String)</div>
+<div class="b-r">Local variable named ival</div>
+<div class="b-r">At GetIntRange.java:[line 31]</div>
+<div class="b-d">Dead store to ival in io.sudheer.practice.GetIntRange.proceedForTokens(String)</div>
+</div>
+<div style="display:none;" id="b-uid-e45bfb4edf5ad407aac3426d91a07adf-0">
+<div class="b-r">In class io.sudheer.practice.GetIntRange</div>
+<div class="b-r">In method io.sudheer.practice.GetIntRange.getIntRange(String, String)</div>
+<div class="b-r">Called method Integer.toString()</div>
+<div class="b-r">Should call Integer.toString(int) instead</div>
+<div class="b-r">At GetIntRange.java:[line 119]</div>
+<div class="b-r">Another occurrence at GetIntRange.java:[line 124]</div>
+<div class="b-r">Another occurrence at GetIntRange.java:[line 137]</div>
+<div class="b-r">Another occurrence at GetIntRange.java:[line 144]</div>
+<div class="b-r">Another occurrence at GetIntRange.java:[line 172]</div>
+<div class="b-d">Primitive boxed just to call toString in io.sudheer.practice.GetIntRange.getIntRange(String, String)</div>
+</div>
+<div style="display:none;" id="b-uid-c0599660ae10d976104b0b287103dcf2-0">
+<div class="b-r">In class io.sudheer.practice.GetRange</div>
+<div class="b-r">In method io.sudheer.practice.GetRange.proceedForTokens(String)</div>
+<div class="b-r">Local variable named ival</div>
+<div class="b-r">At GetRange.java:[line 200]</div>
+<div class="b-d">Dead store to ival in io.sudheer.practice.GetRange.proceedForTokens(String)</div>
+</div>
+<div style="display:none;" id="b-uid-14d7aff129ada74600a46708e15abf5-0">
+<div class="b-r">In class io.sudheer.practice.GetRange</div>
+<div class="b-r">In method io.sudheer.practice.GetRange.getIntRange(String, String)</div>
+<div class="b-r">Called method Integer.toString()</div>
+<div class="b-r">Should call Integer.toString(int) instead</div>
+<div class="b-r">At GetRange.java:[line 102]</div>
+<div class="b-r">Another occurrence at GetRange.java:[line 107]</div>
+<div class="b-r">Another occurrence at GetRange.java:[line 120]</div>
+<div class="b-r">Another occurrence at GetRange.java:[line 127]</div>
+<div class="b-r">Another occurrence at GetRange.java:[line 155]</div>
+<div class="b-d">Primitive boxed just to call toString in io.sudheer.practice.GetRange.getIntRange(String, String)</div>
+</div>
+<div style="display:none;" id="b-uid-689ccc06b96500d372b9aacef0652fff-0">
+<div class="b-r">In class io.sudheer.practice.MoveCursor</div>
+<div class="b-r">In method io.sudheer.practice.MoveCursor.changeCursorLocation()</div>
+<div class="b-r">At MoveCursor.java:[line 30]</div>
+<div class="b-d">io.sudheer.practice.MoveCursor.changeCursorLocation() uses the nextDouble method of Random to generate
+    a random integer; using nextInt is more efficient</div>
+</div>
+<div style="display:none;" id="b-uid-198e286c54b29bf5ce05dea9389b8584-0">
+<div class="b-r">In class io.sudheer.practice.PrimeTest</div>
+<div class="b-r">In method io.sudheer.practice.PrimeTest.main(String[])</div>
+<div class="b-r">Called method new java.util.Scanner(InputStream)</div>
+<div class="b-r">At PrimeTest.java:[line 9]</div>
+<div class="b-d">Found reliance on default encoding in io.sudheer.practice.PrimeTest.main(String[]): new
+    java.util.Scanner(InputStream)</div>
+</div>
+<div style="display:none;" id="b-uid-4fed553dff5c6cc42e0854d7e23cdf07-0">
+<div class="b-r">In class io.sudheer.practice.PrimeTest</div>
+<div class="b-r">In method io.sudheer.practice.PrimeTest.isPrime(int, int)</div>
+<div class="b-r">At PrimeTest.java:[line 24]</div>
+<div class="b-r">Loop bottom at PrimeTest.java:[line 34]</div>
+<div class="b-r">Local variable named b</div>
+<div class="b-r">Last changed at PrimeTest.java:[line 23]</div>
+<div class="b-r">Local variable named a</div>
+<div class="b-r">Last changed at PrimeTest.java:[line 23]</div>
+<div class="b-d">There is an apparent infinite loop in io.sudheer.practice.PrimeTest.isPrime(int, int)</div>
+</div>
+<div style="display:none;" id="b-uid-14fbe1616103ddfb3154136f643cd92c-0">
+<div class="b-r">In class io.sudheer.practice.PrimeTest</div>
+<div class="b-r">In method io.sudheer.practice.PrimeTest.main(String[])</div>
+<div class="b-r">At PrimeTest.java:[line 13]</div>
+<div class="b-r">Loop bottom at PrimeTest.java:[line 17]</div>
+<div class="b-r">Local variable named b</div>
+<div class="b-r">Last changed at PrimeTest.java:[line 12]</div>
+<div class="b-r">Local variable named a</div>
+<div class="b-r">Last changed at PrimeTest.java:[line 11]</div>
+<div class="b-d">There is an apparent infinite loop in io.sudheer.practice.PrimeTest.main(String[])</div>
+</div>
+<div style="display:none;" id="b-uid-3051e6b278cbef92ea73b94e063df4d-0">
+<div class="b-r">In class io.sudheer.practice.ReplaceWithMaxScan</div>
+<div class="b-r">In method io.sudheer.practice.ReplaceWithMaxScan.replaceWithMaxScanNumber(String, int)</div>
+<div class="b-r">Called method Integer.valueOf(int)</div>
+<div class="b-r">At ReplaceWithMaxScan.java:[line 51]</div>
+<div class="b-d">Boxed value is unboxed and then immediately reboxed in
+    io.sudheer.practice.ReplaceWithMaxScan.replaceWithMaxScanNumber(String, int)</div>
+</div>
+<div style="display:none;" id="b-uid-2ba2bd6b800951b27a9a5ef69adfeb-0">
+<div class="b-r">In class com.ge.sample.SbAppend</div>
+<div class="b-r">In method com.ge.sample.SbAppend.main(String[])</div>
+<div class="b-r">Called method new StringBuilder(String)</div>
+<div class="b-r">At SbAppend.java:[line 13]</div>
+<div class="b-r">Value loaded from sso</div>
+<div class="b-r">Argument 1 is definitely null but must not be null</div>
+<div class="b-d">Non-virtual method call in com.ge.sample.SbAppend.main(String[]) passes null for non-null parameter of new StringBuilder(String)</div>
+</div>
+<div style="display:none;" id="b-uid-5ab3776253b603d2e39db040825be248-0">
+<div class="b-r">In class io.sudheer.practice.ScanNumber</div>
+<div class="b-r">In method io.sudheer.practice.ScanNumber.main(String[])</div>
+<div class="b-r">Called method Integer.valueOf(int)</div>
+<div class="b-r">At ScanNumber.java:[line 36]</div>
+<div class="b-d">Boxed value is unboxed and then immediately reboxed in io.sudheer.practice.ScanNumber.main(String[])</div>
+</div>
+<div style="display:none;" id="b-uid-86b151dd437e06998e5924349b4f5ab5-0">
+<div class="b-r">In class io.sudheer.practice.StreamCompress</div>
+<div class="b-r">In method io.sudheer.practice.StreamCompress.main(String[])</div>
+<div class="b-r">File name D:/gegdc/SV40298/ActiveProcess/ActiveProcessWorkSpace/sample/src/compressed.tzf</div>
+<div class="b-r">At StreamCompress.java:[line 52]</div>
+<div class="b-r">Another occurrence at StreamCompress.java:[line 58]</div>
+<div class="b-d">Hard coded reference to an absolute pathname in io.sudheer.practice.StreamCompress.main(String[])</div>
+</div>
+<div style="display:none;" id="b-uid-3a141dde51aeed42da41cddc838b4f5e-0">
+<div class="b-r">In class io.sudheer.practice.StreamCompress</div>
+<div class="b-r">In method io.sudheer.practice.StreamCompress.main(String[])</div>
+<div class="b-r">File name D:/gegdc/SV40298/ActiveProcess/ActiveProcessWorkSpace/sample/src/decompressed.txt</div>
+<div class="b-r">At StreamCompress.java:[line 60]</div>
+<div class="b-d">Hard coded reference to an absolute pathname in io.sudheer.practice.StreamCompress.main(String[])</div>
+</div>
+<div style="display:none;" id="b-uid-ac4c5017cf2707deaeeb9559713e55b0-0">
+<div class="b-r">In class io.sudheer.practice.StreamCompress</div>
+<div class="b-r">In method io.sudheer.practice.StreamCompress.compressString(String)</div>
+<div class="b-r">Called method String.getBytes()</div>
+<div class="b-r">At StreamCompress.java:[line 11]</div>
+<div class="b-d">Found reliance on default encoding in io.sudheer.practice.StreamCompress.compressString(String):
+    String.getBytes()</div>
+</div>
+<div style="display:none;" id="b-uid-f40e68bc75c451ebc69b13e69d8e029c-0">
+<div class="b-r">In class io.sudheer.practice.StreamCompress</div>
+<div class="b-r">In method io.sudheer.practice.StreamCompress.compressStringToFile(String)</div>
+<div class="b-r">Called method String.getBytes()</div>
+<div class="b-r">At StreamCompress.java:[line 21]</div>
+<div class="b-d">Found reliance on default encoding in io.sudheer.practice.StreamCompress.compressStringToFile(String):
+    String.getBytes()</div>
+</div>
+<div style="display:none;" id="b-uid-39525369006a23cd5883365a0a9b51d2-0">
+<div class="b-r">In class io.sudheer.practice.StreamCompress</div>
+<div class="b-r">Field io.sudheer.practice.StreamCompress.out</div>
+<div class="b-r">At StreamCompress.java:[line 47]</div>
+<div class="b-d">io.sudheer.practice.StreamCompress.out should be package protected</div>
+</div>
+<div style="display:none;" id="b-uid-49eef99ac4bf6fef5f303747a9de0988-0">
+<div class="b-r">In class com.ge.sample.Test</div>
+<div class="b-r">In method com.ge.sample.Test.main(String[])</div>
+<div class="b-r">Local variable named y</div>
+<div class="b-r">At Test.java:[line 20]</div>
+<div class="b-d">Dead store to y in com.ge.sample.Test.main(String[])</div>
+</div>
+<div style="display:none;" id="b-uid-e5335d8f5c5aee30460b670b145dc37c-0">
+<div class="b-r">In class io.sudheer.practice.TestFileSize</div>
+<div class="b-r">In method io.sudheer.practice.TestFileSize.testFileSize(int)</div>
+<div class="b-r">File name D:/gegdc/SV40298/ActiveProcess/ActiveProcessWorkSpace/sample/src/sample.txt</div>
+<div class="b-r">At TestFileSize.java:[line 20]</div>
+<div class="b-d">Hard coded reference to an absolute pathname in io.sudheer.practice.TestFileSize.testFileSize(int)</div>
+</div>
+<div style="display:none;" id="b-uid-a4f6a9e48f422a164950ed7e64d7d6e0-0">
+<div class="b-r">In class io.sudheer.practice.TestFileSize</div>
+<div class="b-r">In method io.sudheer.practice.TestFileSize.testFileSize(int)</div>
+<div class="b-r">Called method new java.io.FileReader(File)</div>
+<div class="b-r">At TestFileSize.java:[line 35]</div>
+<div class="b-d">Found reliance on default encoding in io.sudheer.practice.TestFileSize.testFileSize(int): new
+    java.io.FileReader(File)</div>
+</div>
+<div style="display:none;" id="b-uid-69381ca33aecc10fbfc8b3baa2c35394-0">
+<div class="b-r">In class io.sudheer.practice.TestFileSize</div>
+<div class="b-r">In method io.sudheer.practice.TestFileSize.testFileSize(int)</div>
+<div class="b-r">Called method new java.io.FileWriter(File)</div>
+<div class="b-r">At TestFileSize.java:[line 26]</div>
+<div class="b-d">Found reliance on default encoding in io.sudheer.practice.TestFileSize.testFileSize(int): new
+    java.io.FileWriter(File)</div>
+</div>
+<div style="display:none;" id="b-uid-92be2bf365c70095cbf363ae7db0dcf4-0">
+<div class="b-r">In class io.sudheer.practice.TestFileSize</div>
+<div class="b-r">In method io.sudheer.practice.TestFileSize.testFileSize(int)</div>
+<div class="b-r">At TestFileSize.java:[line 24]</div>
+<div class="b-d">io.sudheer.practice.TestFileSize.testFileSize(int) invokes inefficient new String(String) constructor</div>
+</div>
+<div style="display:none;" id="b-uid-429619dda6376aba73035fe9bc405ef1-0">
+<div class="b-r">In class io.sudheer.practice.TestingRanges</div>
+<div class="b-r">In method io.sudheer.practice.TestingRanges.main(String[])</div>
+<div class="b-r">Called method Integer.valueOf(int)</div>
+<div class="b-r">At TestingRanges.java:[line 32]</div>
+<div class="b-d">Boxed value is unboxed and then immediately reboxed in io.sudheer.practice.TestingRanges.main(String[])</div>
+</div>
+<div style="display:none;" id="b-uid-f674c9189de1892b54ff29089e6c45e9-0">
+<div class="b-r">In class io.sudheer.practice.ZlibCompression</div>
+<div class="b-r">In method io.sudheer.practice.ZlibCompression.main(String[])</div>
+<div class="b-r">File name D:/gegdc/SV40298/ActiveProcess/ActiveProcessWorkSpace/sample/src/decompressedC++.txt</div>
+<div class="b-r">At ZlibCompression.java:[line 90]</div>
+<div class="b-d">Hard coded reference to an absolute pathname in io.sudheer.practice.ZlibCompression.main(String[])</div>
+</div>
+<div style="display:none;" id="b-uid-ef36254943fda744daa5127c4d0f282b-0">
+<div class="b-r">In class io.sudheer.practice.ZlibCompression</div>
+<div class="b-r">In method io.sudheer.practice.ZlibCompression.main(String[])</div>
+<div class="b-r">File name D:/gegdc/SV40298/jboss4.0.3/server/default/log/opt/shared/data/tdmdataaccess/temp/tdm-tmp3-1393577808.tzf</div>
+<div class="b-r">At ZlibCompression.java:[line 85]</div>
+<div class="b-d">Hard coded reference to an absolute pathname in io.sudheer.practice.ZlibCompression.main(String[])</div>
+</div>
+<div style="display:none;" id="b-uid-d248535c124c85c0c1627ecfca3b078b-0">
+<div class="b-r">In class io.sudheer.practice.ZlibCompression</div>
+<div class="b-r">In method io.sudheer.practice.ZlibCompression.compressStringToFile(String, File)</div>
+<div class="b-r">Called method String.getBytes()</div>
+<div class="b-r">At ZlibCompression.java:[line 41]</div>
+<div class="b-d">Found reliance on default encoding in io.sudheer.practice.ZlibCompression.compressStringToFile(String,
+    File): String.getBytes()</div>
+</div>
+<div style="display:none;" id="b-uid-ad46f22665d83ea65f8c2f69a878d9f9-0">
+<div class="b-r">In class io.sudheer.practice.ZlibCompression</div>
+<div class="b-r">In method io.sudheer.practice.ZlibCompression.compressStringToStream(String, OutputStream)</div>
+<div class="b-r">Called method String.getBytes()</div>
+<div class="b-r">At ZlibCompression.java:[line 30]</div>
+<div class="b-d">Found reliance on default encoding in
+    io.sudheer.practice.ZlibCompression.compressStringToStream(String, OutputStream): String.getBytes()</div>
+</div>
+<div style="display:none;" id="b-uid-68b8abf7c7e8f2a35c9a7d25e12b1405-0">
+<div class="b-r">In class io.sudheer.practice.ZlibCompression</div>
+<div class="b-r">In method io.sudheer.practice.ZlibCompression.compressFile(File, File)</div>
+<div class="b-r">Reference type java.io.InputStream</div>
+<div class="b-r">1 instances of obligation remaining</div>
+<div class="b-r">Obligation to clean up resource created at ZlibCompression.java:[line 19] is not discharged</div>
+<div class="b-r">Path continues at ZlibCompression.java:[line 20]</div>
+<div class="b-r">Remaining obligations: {InputStream x 1}</div>
+<div class="b-d">io.sudheer.practice.ZlibCompression.compressFile(File, File) may fail to clean up java.io.InputStream
+    on checked exception</div>
+</div>
+</div>
+<div id="fixedbox">
+<div id="bug-placeholder"/>
+</div>
+</body>
+</html>

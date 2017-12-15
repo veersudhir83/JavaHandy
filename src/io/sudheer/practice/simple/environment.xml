@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<environments>
+<environment name="server">SERVER_LOCAL</environment>
+</environments>

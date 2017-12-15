@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>ZlibCompression.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCo-codequality</a> &gt; <a href="index.source.html" class="el_package">com.ge.sample</a> &gt; <span class="el_source">ZlibCompression.java</span></div><h1>ZlibCompression.java</h1><pre class="source lang-java linenums">package com.ge.sample;
+
+import java.util.zip.*;
+import java.io.*;
+
+/**
+ * Example program to demonstrate how to use zlib compression with
+ * Java.
+ * Inspired by http://stackoverflow.com/q/6173920/600500.
+ */
+<span class="nc" id="L11">public class ZlibCompression {</span>
+
+    /**
+     * Compresses a file with zlib compression.
+     */
+    public static void compressFile(File raw, File compressed)
+        throws IOException
+    {
+<span class="nc" id="L19">        InputStream in = new FileInputStream(raw);</span>
+<span class="nc" id="L20">        OutputStream out =</span>
+            new DeflaterOutputStream(new FileOutputStream(compressed));
+<span class="nc" id="L22">        shovelInToOut(in, out);</span>
+<span class="nc" id="L23">        in.close();</span>
+<span class="nc" id="L24">        out.close();</span>
+<span class="nc" id="L25">    }</span>
+    
+    public static void compressStringToStream(String input, OutputStream outStr)
+    throws IOException
+	{
+<span class="nc" id="L30">    	InputStream in = new ByteArrayInputStream(input.getBytes());</span>
+<span class="nc" id="L31">	    OutputStream out =</span>
+	        new DeflaterOutputStream(outStr);
+<span class="nc" id="L33">	    shovelInToOut(in, out);</span>
+<span class="nc" id="L34">	    in.close();</span>
+<span class="nc" id="L35">	    out.close();</span>
+<span class="nc" id="L36">	}</span>
+    
+    public static void compressStringToFile(String input, File compressed)
+    throws IOException
+	{
+<span class="nc" id="L41">    	InputStream in = new ByteArrayInputStream(input.getBytes());</span>
+<span class="nc" id="L42">    	OutputStream out =</span>
+            new DeflaterOutputStream(new FileOutputStream(compressed));
+<span class="nc" id="L44">	    shovelInToOut(in, out);</span>
+<span class="nc" id="L45">	    in.close();</span>
+<span class="nc" id="L46">	    out.close();</span>
+<span class="nc" id="L47">	}</span>
+
+    /**
+     * Decompresses a zlib compressed file.
+     */
+    public static void decompressFile(File compressed, File raw)
+        throws IOException
+    {
+<span class="nc" id="L55">        InputStream in =</span>
+            new InflaterInputStream(new FileInputStream(compressed));
+<span class="nc" id="L57">        OutputStream out = new FileOutputStream(raw);</span>
+<span class="nc" id="L58">        shovelInToOut(in, out);</span>
+<span class="nc" id="L59">        in.close();</span>
+<span class="nc" id="L60">        out.close();</span>
+<span class="nc" id="L61">    }</span>
+        
+    /**
+     * Shovels all data from an input stream to an output stream.
+     */
+    private static void shovelInToOut(InputStream in, OutputStream out)
+        throws IOException
+    {
+<span class="nc" id="L69">        byte[] buffer = new byte[Short.MAX_VALUE];</span>
+        int len;
+<span class="nc bnc" id="L71" title="All 2 branches missed.">        while((len = in.read(buffer)) &gt; 0) {</span>
+<span class="nc" id="L72">            out.write(buffer, 0, len);</span>
+        }    	
+<span class="nc" id="L74">    }</span>
+
+
+    /**
+     * Main method to test it all.
+     */
+    public static void main(String[] args) throws IOException, DataFormatException {
+    	/*String input = &quot;13050553,DEV,NOMODEL-G,123-001/1,NPSS,P2,9880,1,1,9999-12-31 00:00:00,NONE,-999,NONE,NONE      ,2012-10-05 05:32:10,TESTSITE,1,ENGINE,SS,0,1,NONE,NONE,NONE,NONE,1768.39794899999993,1222.40905799999996,3669.56933600000002,14.69599915,22.88507843,529.61602779999998,600.99493410000002,1768.39794899999993,1222.40905799999996,1.557231903\n&quot;
+			+ &quot;13050580,DEV,NOMODEL-G,123-001/1,NPSS,P2,9880,1,1,9999-12-31 00:00:00,NONE,-999,NONE,NONE      ,2012-02-22 08:51:57,TESTSITE,2,ENGINE,SS,0,1,NONE,NONE,NONE,NONE,1768.4285890000001,1222.43640099999993,3669.65893599999981,14.69599915,22.8849411,529.61584470000003,600.99371340000005,1768.4285890000001,1222.43640099999993,1.557222605\n&quot;
+			+ &quot;13050603,DEV,NOMODEL-G,123-001/1,NPSS,P2,9880,1,1,9999-12-31 00:00:00,NONE,-999,NONE,NONE      ,2012-02-22 08:51:57,TESTSITE,3,ENGINE,SS,0,1,NONE,NONE,NONE,NONE,1768.4285890000001,1222.43627900000001,3669.65869100000009,14.6960001,22.88494301,529.61590579999995,600.99371340000005,1768.4285890000001,1222.43627900000001,1.557222605&quot;;
+        */
+<span class="nc" id="L85">    	File compressed = new File(&quot;D:/gegdc/SV40298/jboss4.0.3/server/default/log/opt/shared/data/tdmdataaccess/temp/tdm-tmp3-1393577808.tzf&quot;);</span>
+<span class="nc" id="L86">    	System.out.println(&quot;compressed length::&quot; + compressed.length());</span>
+        //compressStringToFile(input, compressed);
+        
+        //compressFile(new File(&quot;D:/gegdc/SV40298/ActiveProcess/ActiveProcessWorkSpace/sample/src/input.csv&quot;), compressed);
+<span class="nc" id="L90">        decompressFile(compressed, new File(&quot;D:/gegdc/SV40298/ActiveProcess/ActiveProcessWorkSpace/sample/src/decompressedC++.txt&quot;));</span>
+<span class="nc" id="L91">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

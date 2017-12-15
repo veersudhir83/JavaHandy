@@ -1,0 +1,175 @@
+<project name="codequality" default="run" basedir="." xmlns:ac="antlib:net.sf.antcontrib" xmlns:jacoco="antlib:org.jacoco.ant">
+	<description>   
+        Ant build sample for running 
+        - findbugs, 
+        - pmd, 
+        - checkstyle, 
+        - cobertrua and 
+        - junit.
+    </description>
+
+	<!-- Change the paths to your individual installation directories -->
+	<property name="checkstyle.home.dir" location="C:/Users/SV40298/.jenkins/userContent/codequalitytools/checkstyle-6.11.2-all" />
+	<property name="findbugs.home.dir" value="C:/Users/SV40298/.jenkins/userContent/codequalitytools/findbugs-3.0.1" />
+	<property name="pmd.home.dir" value="C:/Users/SV40298/.jenkins/userContent/codequalitytools/pmd-java-5.4.0" />
+	<property name="jacoco.home.dir" value="C:/Users/SV40298/.jenkins/userContent/codequalitytools/jacoco-0.7.5" />
+
+	<property name="lib.dir" location="${basedir}/lib" />
+	<property name="src.dir" location="${basedir}/src" />
+	<property name="bin.dir" location="${basedir}/bin" />
+
+	<property name="htm.dir" location="${basedir}/html" />
+	<property name="report.dir" location="${basedir}/report" />
+	<property name="report.checkstyle.dir" location="${report.dir}/checkstyle" />
+	<property name="report.findbugs.dir" location="${report.dir}/findbugs" />
+	<property name="report.pmd.dir" location="${report.dir}/pmd" />
+	<property name="report.temp.dir" location="${report.dir}/temp" />
+
+	<property name="report.jacoco.dir" location="${report.dir}/jacoco"/>
+	<property name="report.jacoco.exec.file" location="${report.jacoco.dir}/jacoco.exec"/>
+
+	<taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml">
+		<classpath path="${jacoco.home.dir}/lib/jacocoant.jar"/>
+	</taskdef>
+
+	<!-- Cleans workspace -->
+	<target name="clean" description="Delete all result to start with a clean build.">
+		<delete dir="${report.checkstyle.dir}" />
+		<delete dir="${report.findbugs.dir}" />
+		<delete dir="${report.pmd.dir}" />
+		<delete dir="${bin.dir}" />
+		<delete dir="${report.jacoco.dir}" />
+		<mkdir dir="${report.dir}" />
+	</target>
+
+	<!-- Prepares reports folder -->
+	<target name="prepare.report.dir" description="Prepares the reports folder">
+		<copy todir="${report.dir}">
+			<fileset dir="${htm.dir}">
+				<include name="*.htm" />
+			</fileset>
+		</copy>
+	</target>
+
+	<!-- Source Code compiler -->
+	<target name="compile" depends="clean" description="Compile the entire project.">
+		<mkdir dir="${bin.dir}" />
+		<javac srcdir="${src.dir}" destdir="${bin.dir}" debug="on" deprecation="on">
+		</javac>
+	</target>
+
+	<!-- Checkstyle Analyzer -->
+	<target name="report.checkstyle" description="Generate a report of code convention violations.">
+		<taskdef resource="com/puppycrawl/tools/checkstyle/ant/checkstyle-ant-task.properties" classpath="${checkstyle.home.dir}/checkstyle-6.11.2-all.jar" />
+
+		<!-- run verification of installation-->
+		<available file="${checkstyle.home.dir}/checkstyle-6.11.2-all.jar" property="checkstyle.available" />
+		<fail unless="checkstyle.available" message="Error: CHECKSTYLE_HOME not set or checkstyle-6.11.2-all.jar not found." />
+		<mkdir dir="${report.checkstyle.dir}" />
+
+		<!-- run analysis-->
+		<checkstyle config="${checkstyle.home.dir}/sun_checks.xml" failureProperty="checkstyle.failure" failOnViolation="false">
+			<formatter type="xml" tofile="${report.checkstyle.dir}/checkstyle_report.xml" />
+			<fileset dir="${src.dir}" includes="**/*.java" />
+		</checkstyle>
+
+		<xslt in="${report.checkstyle.dir}/checkstyle_report.xml" out="${report.checkstyle.dir}/checkstyle_report.html" style="${checkstyle.home.dir}/contrib/checkstyle-noframes.xsl" />
+
+	</target>
+
+	<!-- FindBugs Analyzer -->
+
+	<target name="findbugs" depends="compile" description="Run code analysis over code to check for problems.">
+		<!-- Fail this target if FindBugs is not installed. -->
+		<available file="${findbugs.home.dir}/lib/findbugs.jar" property="findbugs.available" />
+		<fail unless="findbugs.available" message="Error: FINDBUGS_HOME not set or findbugs.jar not found." />
+		<taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask" classpath="${findbugs.home.dir}/lib/findbugs-ant.jar" />
+
+		<!-- Run FindBugs. -->
+		<mkdir dir="${report.findbugs.dir}" />
+		<findbugs home="${findbugs.home.dir}" workHard="true" output="xml:withMessages" outputFile="${report.findbugs.dir}/findbugs.xml">
+			<class location="${bin.dir}" />
+			<auxClasspath>
+				<fileset file="${basedir}/lib/junit-4.5.jar" />
+			</auxClasspath>
+		</findbugs>
+	</target>
+
+	<target name="report.findbugs" description="Generate a report on error analysis.">
+		<xslt in="${report.findbugs.dir}/findbugs.xml" style="${findbugs.home.dir}/src/xsl/fancy.xsl" out="${report.findbugs.dir}/findbugs-default.html" />
+	</target>
+
+	<!-- PMD Analyzer -->
+	<path id="pmd2.classpath">
+		<pathelement location="${build}" />
+		<fileset dir="${pmd.home.dir}/lib/">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<target name="report.pmd">
+		<taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask" classpathref="pmd2.classpath" />
+		<mkdir dir="${report.pmd.dir}" />
+		<pmd>
+			<sourceLanguage name="java" version="1.7"/>
+			<ruleset>rulesets/java/design.xml</ruleset>
+			<ruleset>rulesets/java/unusedcode.xml</ruleset>
+			<ruleset>rulesets/java/braces.xml</ruleset>
+			<ruleset>rulesets/java/design.xml</ruleset>
+			<formatter type="xml" toFile="${report.pmd.dir}/pmd_report.xml"/>
+			<fileset dir="${src.dir}">
+				<include name="**/*.java" />
+			</fileset>
+		</pmd>
+		<xslt in="${report.pmd.dir}/pmd_report.xml" 
+							style="${pmd.home.dir}/etc/xslt/pmd-nicerhtml.xsl" 
+							out="${report.pmd.dir}/pmd_report.html" />
+	</target>
+
+	<!-- Code Coverage with JaCoCo -->
+	<target name="jacocotest" depends="compile" description="JaCoCo Coverage Task">
+		<mkdir dir="${report.jacoco.dir}" />
+		<jacoco:coverage destfile="${report.jacoco.exec.file}">
+			<java classname="io.sudheer.practice.Fibonacci" fork="true">
+				<classpath>
+					<pathelement location="${bin.dir}"/>
+				</classpath>
+				<arg value="10"/>
+			</java>
+		</jacoco:coverage>
+	</target>
+
+	<target name="jacocoreport" depends="jacocotest" description="JaCoCo Coverage Report">
+		<jacoco:report>
+			<!-- This task needs the collected execution data and ... -->
+			<executiondata>
+				<file file="${report.jacoco.exec.file}" />
+			</executiondata>
+			<!--  the class files and optional source files ...  -->
+			<structure name="JaCoCo-codequality">
+				<classfiles>
+					<fileset dir="${bin.dir}" />
+				</classfiles>
+				<sourcefiles encoding="UTF-8">
+					<fileset dir="${src.dir}" />
+				</sourcefiles>
+			</structure>
+			<!--  to produce reports in different formats.  -->
+			<html destdir="${report.jacoco.dir}" />
+			<csv destfile="${report.jacoco.dir}/report.csv" />
+			<xml destfile="${report.jacoco.dir}/report.xml" />
+		</jacoco:report>
+	</target>
+
+	<!-- Primary Target to run -->
+	<target name="run" description="Run the build" 
+		depends="clean, 
+			compile, 
+	        report.checkstyle,
+			findbugs, 
+	        report.findbugs,
+			report.pmd,
+			jacocoreport">
+	</target>
+
+</project>

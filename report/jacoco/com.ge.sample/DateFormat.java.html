@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>DateFormat.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCo-codequality</a> &gt; <a href="index.source.html" class="el_package">com.ge.sample</a> &gt; <span class="el_source">DateFormat.java</span></div><h1>DateFormat.java</h1><pre class="source lang-java linenums">package com.ge.sample;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
+/**
+ * 
+ */
+
+/**
+ * @author Sudheer Veeravalli (SSO 502242973)
+ *
+ */
+<span class="nc" id="L16">public class DateFormat {</span>
+
+	/**
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+<span class="nc" id="L23">		String dateStr = &quot;Mon Jun 18 00:00:00 IST 2012&quot;;</span>
+<span class="nc" id="L24">		SimpleDateFormat formatter = new SimpleDateFormat(&quot;E MMM dd HH:mm:ss Z yyyy&quot;);</span>
+<span class="nc" id="L25">		Date date = null;</span>
+		try {
+<span class="nc" id="L27">			date = (Date)formatter.parse(dateStr);</span>
+<span class="nc" id="L28">		} catch (ParseException e) {</span>
+			// TODO Auto-generated catch block
+<span class="nc" id="L30">			e.printStackTrace();</span>
+<span class="nc" id="L31">		}</span>
+<span class="nc" id="L32">		System.out.println(date);        </span>
+
+<span class="nc" id="L34">		Calendar cal = Calendar.getInstance();</span>
+<span class="nc" id="L35">		cal.setTime(date);</span>
+<span class="nc" id="L36">		String formatedDate = cal.get(Calendar.YEAR) + &quot;/&quot; + (cal.get(Calendar.MONTH) + 1) + &quot;/&quot; +         cal.get(Calendar.DATE);</span>
+<span class="nc" id="L37">		System.out.println(&quot;formatedDate : &quot; + formatedDate);   </span>
+<span class="nc" id="L38">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>

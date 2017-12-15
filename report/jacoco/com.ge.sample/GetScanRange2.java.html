@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../.resources/report.css" type="text/css"/><link rel="shortcut icon" href="../.resources/report.gif" type="image/gif"/><title>GetScanRange2.java</title><link rel="stylesheet" href="../.resources/prettify.css" type="text/css"/><script type="text/javascript" src="../.resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../.sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">JaCoCo-codequality</a> &gt; <a href="index.source.html" class="el_package">com.ge.sample</a> &gt; <span class="el_source">GetScanRange2.java</span></div><h1>GetScanRange2.java</h1><pre class="source lang-java linenums">package com.ge.sample;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.StringTokenizer;
+
+<span class="nc" id="L13">public class GetScanRange2 {</span>
+	
+	public static void main (String args[]) {
+		try {
+<span class="nc" id="L17">			System.out.println(&quot;Start Time:&quot;);</span>
+<span class="nc" id="L18">			convertmillistoHrFormat();</span>
+			/*int[] ranges = range(1,300000,2);
+			StringBuilder s = new StringBuilder();
+			for (int var : ranges) {
+				s.append(var + &quot;,&quot;);
+			}
+			String scan = (s.toString().subSequence(0, s.toString().length()-1)).toString();*/
+<span class="nc" id="L25">			String scan = &quot;(1-200000)&quot;;</span>
+<span class="nc" id="L26">			System.out.println(&quot;output from getScanCount::&quot; + getScanCount(scan));</span>
+<span class="nc" id="L27">			System.out.println(&quot;End Time:&quot;);</span>
+<span class="nc" id="L28">			convertmillistoHrFormat();</span>
+<span class="nc" id="L29">		} catch (Exception e) {</span>
+<span class="nc" id="L30">			e.printStackTrace();</span>
+<span class="nc" id="L31">		}</span>
+<span class="nc" id="L32">	}</span>
+	
+	public static int[] range(int start, int end, int step) {
+<span class="nc" id="L35">	    int n = (int) Math.ceil((end-start)/(double)step);</span>
+<span class="nc" id="L36">	    int[] arange = new int[n];</span>
+<span class="nc bnc" id="L37" title="All 2 branches missed.">	    for (int i = 0; i &lt; n; i++)</span>
+<span class="nc" id="L38">	        arange[i] = i*step+start;</span>
+<span class="nc" id="L39">	    return arange;</span>
+	}
+	
+	public static void convertmillistoHrFormat() {
+<span class="nc" id="L43">		DateFormat df = new SimpleDateFormat(&quot;HH:mm:ss&quot;);</span>
+<span class="nc" id="L44">		String formatted = df.format(new Date());</span>
+		
+<span class="nc" id="L46">		System.out.println(formatted);</span>
+<span class="nc" id="L47">	}</span>
+	
+	public static String getScanCount(String value) throws Exception {
+<span class="nc" id="L50">		List&lt;Integer&gt; reading = new ArrayList&lt;Integer&gt;();</span>
+<span class="nc" id="L51">		List&lt;Integer&gt; notInLst = new ArrayList&lt;Integer&gt;();</span>
+<span class="nc" id="L52">		List&lt;Integer&gt; notIndLst = new ArrayList&lt;Integer&gt;();</span>
+		try {
+<span class="nc" id="L54">			StringTokenizer st = new StringTokenizer(value, &quot;(),-!&quot;, true);</span>
+<span class="nc" id="L55">			boolean rangeStart = false,notRange = false;</span>
+<span class="nc" id="L56">			Integer prevValue = null;</span>
+<span class="nc" id="L57">			Integer iVal = null;</span>
+<span class="nc bnc" id="L58" title="All 2 branches missed.">			while (st.hasMoreTokens()) {</span>
+<span class="nc" id="L59">				String token = st.nextToken().trim();</span>
+<span class="nc bnc" id="L60" title="All 2 branches missed.">				if (token.length() == 0) {</span>
+<span class="nc" id="L61">					continue;</span>
+				}
+<span class="nc" id="L63">				boolean isNumber = false;</span>
+				try {
+<span class="nc" id="L65">					int ival = (int) Double.parseDouble(token);</span>
+<span class="nc" id="L66">					iVal = Integer.valueOf(ival);</span>
+<span class="nc" id="L67">					prevValue = iVal;</span>
+<span class="nc bnc" id="L68" title="All 2 branches missed.">					if(!notRange)</span>
+<span class="nc" id="L69">						reading.add(iVal);</span>
+<span class="nc" id="L70">					isNumber = true;</span>
+<span class="nc" id="L71">				} catch (Exception ignore) {</span>
+					//System.out.println(&quot;Exception in getIntRange:&quot; + ignore.getMessage());
+<span class="nc" id="L73">				}</span>
+
+<span class="nc bnc" id="L75" title="All 2 branches missed.">				if (isNumber) {</span>
+<span class="nc bnc" id="L76" title="All 4 branches missed.">					if (rangeStart || notRange) {</span>
+						// List to hold range values
+<span class="nc" id="L78">						ArrayList&lt;Integer&gt; rageData = new ArrayList&lt;Integer&gt;();</span>
+<span class="nc" id="L79">						rageData.add(prevValue);</span>
+
+<span class="nc bnc" id="L81" title="All 4 branches missed.">						while (!&quot;)&quot;.equals(token) &amp;&amp; st.hasMoreTokens()) {</span>
+<span class="nc" id="L82">							token = st.nextToken().trim();</span>
+<span class="nc bnc" id="L83" title="All 6 branches missed.">							if (&quot;,&quot;.equals(token) || &quot;)&quot;.equals(token) || &quot;-&quot;.equals(token)) {</span>
+<span class="nc" id="L84">								prevValue = null;</span>
+<span class="nc" id="L85">								continue;</span>
+							} else {
+								try {
+<span class="nc" id="L88">									int val = (int) Double.parseDouble(token);</span>
+<span class="nc" id="L89">									rageData.add(Integer.valueOf(val));</span>
+<span class="nc" id="L90">								} catch (Exception ex) {</span>
+<span class="nc" id="L91">									throw new Exception(value);</span>
+<span class="nc" id="L92">								}</span>
+							}
+						}
+
+						// check for valid range data
+<span class="nc bnc" id="L97" title="All 6 branches missed.">						if (!notRange &amp;&amp; rageData.size() &lt; 2 || rageData.size() &gt; 3) {</span>
+<span class="nc" id="L98">							throw new Exception(value);</span>
+						}
+<span class="nc" id="L100">						int init = rageData.get(0).intValue();</span>
+<span class="nc" id="L101">						int last = 999999999;</span>
+<span class="nc bnc" id="L102" title="All 2 branches missed.">						if(rageData.size() &gt;= 2)</span>
+<span class="nc" id="L103">							last = rageData.get(1).intValue();</span>
+
+<span class="nc" id="L105">						int step = 1;</span>
+<span class="nc bnc" id="L106" title="All 2 branches missed.">						if (rageData.size() == 3) {</span>
+<span class="nc" id="L107">							step = rageData.get(2).intValue();</span>
+						}
+<span class="nc bnc" id="L109" title="All 2 branches missed.">						if (init &gt; last) {</span>
+<span class="nc" id="L110">							throw new Exception(</span>
+									&quot;Range start value is greater than range end value in string: &quot;
+											+ value);
+						}
+<span class="nc bnc" id="L114" title="All 2 branches missed.">						if(notRange) {</span>
+<span class="nc bnc" id="L115" title="All 2 branches missed.">							if(rageData.size() &gt;= 1){</span>
+<span class="nc" id="L116">								notIndLst.add( Integer.valueOf(init));</span>
+							}
+<span class="nc bnc" id="L118" title="All 2 branches missed.">							if(rageData.size() == 2){</span>
+<span class="nc" id="L119">								notInLst.add(Integer.valueOf(init));</span>
+<span class="nc" id="L120">								notInLst.add(Integer.valueOf(last));</span>
+							}
+						}else {
+<span class="nc bnc" id="L123" title="All 2 branches missed.">							for (int i = init + step; i &lt;= last; i = i + step) {</span>
+<span class="nc" id="L124">								Integer intr = Integer.valueOf(i);</span>
+<span class="nc bnc" id="L125" title="All 2 branches missed.">								if (!reading.contains(intr)) {</span>
+<span class="nc" id="L126">									reading.add(intr);</span>
+								}
+							}
+						}
+<span class="nc" id="L130">						rangeStart = false;</span>
+<span class="nc" id="L131">						notRange = false;</span>
+<span class="nc" id="L132">					}</span>
+				} else {
+<span class="nc bnc" id="L134" title="All 2 branches missed.">					if (&quot;-&quot;.equals(token)) {</span>
+<span class="nc bnc" id="L135" title="All 2 branches missed.">						if (prevValue == null) {</span>
+<span class="nc" id="L136">							throw new Exception(</span>
+									&quot;Range start not specified in string: &quot;
+											+ value);
+						}
+<span class="nc bnc" id="L140" title="All 2 branches missed.">						if (!st.hasMoreTokens()) {</span>
+<span class="nc" id="L141">							throw new Exception(</span>
+									&quot;Range end not specified in string: &quot;
+											+ value);
+						}
+
+						// make series
+<span class="nc" id="L147">						int init = (int) prevValue.intValue();</span>
+<span class="nc" id="L148">						int last = (int) Double.parseDouble(st.nextToken()</span>
+								.trim());
+<span class="nc bnc" id="L150" title="All 2 branches missed.">						if (init &gt; last) {</span>
+<span class="nc" id="L151">							throw new Exception(</span>
+									&quot;Range start value is greater then range end value string: &quot;
+											+ value);
+						}
+
+<span class="nc bnc" id="L156" title="All 2 branches missed.">						for (int i = init + 1; i &lt;= last; ++i) {</span>
+<span class="nc" id="L157">							Integer val = Integer.valueOf(i);</span>
+<span class="nc bnc" id="L158" title="All 2 branches missed.">							if (!reading.contains(val)) {</span>
+<span class="nc" id="L159">								reading.add(val);</span>
+							}
+						}
+<span class="nc" id="L162">					}</span>
+
+<span class="nc bnc" id="L164" title="All 2 branches missed.">					else if (&quot;(&quot;.equals(token)) {</span>
+<span class="nc" id="L165">						rangeStart = true;</span>
+<span class="nc bnc" id="L166" title="All 4 branches missed.">					} else if (&quot;,&quot;.equals(token) || &quot;)&quot;.equals(token)) {</span>
+<span class="nc" id="L167">						prevValue = null;</span>
+<span class="nc" id="L168">						continue;</span>
+<span class="nc bnc" id="L169" title="All 4 branches missed.">					}else if(&quot;!&quot;.equals(token) &amp;&amp; &quot;(&quot;.equals(st.nextToken().trim()) ){</span>
+<span class="nc" id="L170">						notRange = true;</span>
+<span class="nc" id="L171">						rangeStart = true;</span>
+					} else {
+<span class="nc" id="L173">						throw new Exception(value);</span>
+					}
+				}
+<span class="nc" id="L176">			}</span>
+
+<span class="nc" id="L178">		} catch (Exception ex) {</span>
+<span class="nc" id="L179">			throw new Exception( &quot;Unsupported/Invalid range...........: &quot; + value);</span>
+<span class="nc" id="L180">		}</span>
+
+<span class="nc" id="L182">		Set&lt;Integer&gt; uniq = new LinkedHashSet&lt;Integer&gt;(reading);</span>
+<span class="nc bnc" id="L183" title="All 2 branches missed.">		for(Integer val : notIndLst) {</span>
+<span class="nc" id="L184">			uniq.remove(val);</span>
+<span class="nc" id="L185">		}</span>
+<span class="nc bnc" id="L186" title="All 2 branches missed.">		for(int i = 0; i &lt;  notInLst.size() ; i++) {</span>
+<span class="nc" id="L187">			List&lt;Integer&gt; temp = new ArrayList&lt;Integer&gt;();</span>
+<span class="nc" id="L188">			int limit = ++i;</span>
+<span class="nc bnc" id="L189" title="All 2 branches missed.">			for (int j = notInLst.get(i); j &lt;= notInLst.get(limit); ++j) {</span>
+<span class="nc" id="L190">				temp.add(j);</span>
+			}
+<span class="nc" id="L192">			uniq.removeAll(temp);</span>
+		}
+<span class="nc" id="L194">		StringBuilder ret = new StringBuilder();</span>
+<span class="nc" id="L195">		Iterator&lt;Integer&gt; iterator = uniq.iterator();</span>
+<span class="nc" id="L196">		int i =0;</span>
+<span class="nc bnc" id="L197" title="All 2 branches missed.">		while(iterator.hasNext()){</span>
+<span class="nc" id="L198">			ret.append(iterator.next());</span>
+<span class="nc bnc" id="L199" title="All 2 branches missed.">			if(iterator.hasNext())</span>
+<span class="nc" id="L200">				ret.append(&quot;,&quot;);</span>
+<span class="nc" id="L201">			++i;</span>
+		}
+<span class="nc" id="L203">		return ret.toString();</span>
+	}
+}
+
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.eclemma.org/jacoco">JaCoCo</a> 0.7.5.201505241946</span></div></body></html>
