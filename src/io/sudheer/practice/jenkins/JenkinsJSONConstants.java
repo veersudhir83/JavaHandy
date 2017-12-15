@@ -4,7 +4,7 @@ public class JenkinsJSONConstants {
 	public static final String DELIMITER_COMMA_SPACE = ", ";
 	public static final String STATUS_SUCCESS = "SUCCESS";
 	
-	public static final String BUILD_KEY_FULL_DISPLAY_NAME = "fullDisplayName";
+	public static final String BUILD_KEY_DISPLAY_NAME = "displayName";
 	public static final String BUILD_KEY_ACTIONS = "actions";
 	public static final String BUILD_KEY_ACTIONS_CAUSES = "causes";
 	public static final String BUILD_KEY_ACTIONS_CAUSES_STARTED_BY = "shortDescription";

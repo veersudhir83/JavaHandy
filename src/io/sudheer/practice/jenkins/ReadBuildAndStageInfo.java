@@ -3,17 +3,28 @@ package io.sudheer.practice.jenkins;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import io.sudheer.practice.jenkins.JenkinsJSONConstants;
 import io.sudheer.practice.jsonParsing.JSONParser;
 import io.sudheer.practice.simple.CalendarUtils;
 
 public class ReadBuildAndStageInfo {
 	
-	public static void main(String args[]) throws Exception {
+	private static String jenkinsURL = "";
+	private static String projectName = "";
+	private static String projectBranch = "";
+	private static String buildNumber = "";
+	private static boolean multiBranchPipeline = true;
+	
+	public static String getFullInfo() throws Exception {
+		
+		String mainURL = jenkinsURL + "/job/" + projectName + "/";
+		if(multiBranchPipeline) {
+			mainURL = mainURL + "job/" + projectBranch + "/" + buildNumber;
+		} else {
+			mainURL = mainURL + "/" + buildNumber;
+		}
 				
 		StringBuffer csvLine = new StringBuffer();
-		
-		String mainURL = "http://10.1.151.88:9999/job/MediConnekt-DEV/295";
-		//String mainURL = "http://10.1.151.88:9999/job/test-pipeline/7";
 		
 		String buildAPIURL = mainURL + "/api/json";
 		JSONParser buildJSONParser = new JSONParser();
@@ -22,9 +33,11 @@ public class ReadBuildAndStageInfo {
 
 		// Fetch this from the build api url: actions[0].causes[0].userName 
 		// could be any of the actions[] element having _class: "hudson.model.CauseAction" 
-		String causedByUserName = "Not Resolved";
-		
-		causedByUserName = ((JSONObject) ((JSONObject) buildJSONObject.getJSONArray(JenkinsJSONConstants.BUILD_KEY_ACTIONS).get(0)).getJSONArray(JenkinsJSONConstants.BUILD_KEY_ACTIONS_CAUSES).get(0)).getString(JenkinsJSONConstants.BUILD_KEY_ACTIONS_CAUSES_STARTED_BY);		
+		String causedByUserName = "";
+		int actionCauseObjectIndex = 0; // Index should be 0 for multiBranchPipelines, 1 for regular and simple pipelines
+		if (!multiBranchPipeline) 
+			actionCauseObjectIndex = 1;
+		causedByUserName = ((JSONObject) ((JSONObject) buildJSONObject.getJSONArray(JenkinsJSONConstants.BUILD_KEY_ACTIONS).get(actionCauseObjectIndex)).getJSONArray(JenkinsJSONConstants.BUILD_KEY_ACTIONS_CAUSES).get(0)).getString(JenkinsJSONConstants.BUILD_KEY_ACTIONS_CAUSES_STARTED_BY);		
 				
 		String pipelineAPIURL = mainURL + "/wfapi";
 		JSONParser pipelineJSONParser = new JSONParser();
@@ -32,7 +45,7 @@ public class ReadBuildAndStageInfo {
 		JSONObject pipelineJSONObject = pipelineJSONParser.getJSONFromUrl(pipelineAPIURL);
 		
 		// fetch & append build name and number to csv
-		csvLine.append(buildJSONObject.getString(JenkinsJSONConstants.BUILD_KEY_FULL_DISPLAY_NAME));
+		csvLine.append(buildJSONObject.getString(JenkinsJSONConstants.BUILD_KEY_DISPLAY_NAME));
 		csvLine.append(JenkinsJSONConstants.DELIMITER_COMMA_SPACE);
 		
 		// fetch and append build overall status
@@ -66,7 +79,6 @@ public class ReadBuildAndStageInfo {
 			for (int i = 0; i < stagesArray.length(); i++) {
 				stage = stagesArray.getJSONObject(i);
 				int stageDurationInSecs = (int) stage.getLong(JenkinsJSONConstants.STAGE_DURATION_MILLIS)/1000;
-				//System.out.println(stageDurationInSecs);
 				overallPipelineDurationInSecs += stageDurationInSecs;
 				overallStagePauseInSecs += (int) stage.getLong(JenkinsJSONConstants.STAGE_PAUSE_MILLIS); 
 				stagesTimes.append(JenkinsJSONConstants.DELIMITER_COMMA_SPACE);
@@ -105,8 +117,31 @@ public class ReadBuildAndStageInfo {
 			// Append Stage Timings
 			csvLine.append(stagesTimes);
 		}
-				
-		System.out.println("CSV Line=" + csvLine.toString());
+		return csvLine.toString();		
+	}
+	
+	public void setJenkinsURL(String jenkinsURL) {
+		this.jenkinsURL = jenkinsURL;
+	}
+
+
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
+
+
+	public void setProjectBranch(String projectBranch) {
+		this.projectBranch = projectBranch;
+	}
+
+
+	public void setBuildNumber(String buildNumber) {
+		this.buildNumber = buildNumber;
+	}
+
+
+	public void setMultiBranchPipeline(boolean multiBranchPipeline) {
+		this.multiBranchPipeline = multiBranchPipeline;
 	}
     
 }
