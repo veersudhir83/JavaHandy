@@ -9,7 +9,9 @@ public class JenkinsJSONConstants {
 	public static final String BUILD_KEY_ACTIONS_CAUSES = "causes";
 	public static final String BUILD_KEY_ACTIONS_CAUSES_STARTED_BY = "shortDescription";
 	public static final String BUILD_RESULT = "result";
-	public static final String BUILD_DURATION = "duration";	
+	public static final String BUILD_DURATION = "duration";
+	public static final String JOB_BUILDS = "builds";	
+	public static final String JOB_BUILDS_NUMBER = "number";
 	
 	public static final String PIPELINE_KEY_ID = "id";
 	public static final String PIPELINE_KEY_NAME = "name";

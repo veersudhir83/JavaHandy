@@ -8,14 +8,35 @@ import io.sudheer.practice.jsonParsing.JSONParser;
 import io.sudheer.practice.simple.CalendarUtils;
 
 public class ReadBuildAndStageInfo {
+
+	public static StringBuilder getFullInfo(String jenkinsURL, String projectName, String projectBranch, int buildNumber, boolean multiBranchPipeline) throws Exception {
+		StringBuilder sb = new StringBuilder();
+		String headerInfo = "Build, Overall Status, Date, Time, Branch, Total Duration, Build Delay, Pipeline Duration, Pipeline Delay, Pauses In Stage, Stage 1, Stage 2, Stage 3";
+		
+		sb.append(headerInfo);
+		
+		String mainURL = jenkinsURL + "/job/" + projectName + "/";
+		if(multiBranchPipeline) {
+			mainURL = mainURL + "job/" + projectBranch;
+		} 
+		String jobAPIURL = mainURL + "/api/json";
+		JSONParser jobJSONParser = new JSONParser();
+		// get full Json Object from URL
+		JSONObject jobJSONObject = jobJSONParser.getJSONFromUrl(jobAPIURL);
+		JSONArray buildsArray = jobJSONObject.getJSONArray(JenkinsJSONConstants.JOB_BUILDS);
+		
+		int availableBuildNumber = -1;
+		for(int i = 0; i < buildsArray.length(); i++) {
+			JSONObject buildHistObj = (JSONObject) buildsArray.get(i);
+			availableBuildNumber = buildHistObj.getInt(JenkinsJSONConstants.JOB_BUILDS_NUMBER);
+			System.out.println("processing for build" + availableBuildNumber);
+			sb.append("\n").append(getBuildInfo(jenkinsURL, projectName, projectBranch, availableBuildNumber, multiBranchPipeline));
+		}
+		
+		return sb;
+	}
 	
-	private static String jenkinsURL = "";
-	private static String projectName = "";
-	private static String projectBranch = "";
-	private static String buildNumber = "";
-	private static boolean multiBranchPipeline = true;
-	
-	public static String getFullInfo() throws Exception {
+	public static String getBuildInfo(String jenkinsURL, String projectName, String projectBranch, int buildNumber, boolean multiBranchPipeline) throws Exception {
 		
 		String mainURL = jenkinsURL + "/job/" + projectName + "/";
 		if(multiBranchPipeline) {
@@ -30,14 +51,14 @@ public class ReadBuildAndStageInfo {
 		JSONParser buildJSONParser = new JSONParser();
 		// get full Json Object from URL
 		JSONObject buildJSONObject = buildJSONParser.getJSONFromUrl(buildAPIURL);
-
+		
 		// Fetch this from the build api url: actions[0].causes[0].userName 
 		// could be any of the actions[] element having _class: "hudson.model.CauseAction" 
-		String causedByUserName = "";
-		int actionCauseObjectIndex = 0; // Index should be 0 for multiBranchPipelines, 1 for regular and simple pipelines
-		if (!multiBranchPipeline) 
-			actionCauseObjectIndex = 1;
-		causedByUserName = ((JSONObject) ((JSONObject) buildJSONObject.getJSONArray(JenkinsJSONConstants.BUILD_KEY_ACTIONS).get(actionCauseObjectIndex)).getJSONArray(JenkinsJSONConstants.BUILD_KEY_ACTIONS_CAUSES).get(0)).getString(JenkinsJSONConstants.BUILD_KEY_ACTIONS_CAUSES_STARTED_BY);		
+		//String causedByUserName = "";
+		//int actionCauseObjectIndex = 0; // Index should be 0 for multiBranchPipelines, 1 for regular and simple pipelines
+		//if (!multiBranchPipeline) 
+		//	actionCauseObjectIndex = 1;
+		//causedByUserName = ((JSONObject) ((JSONObject) buildJSONObject.getJSONArray(JenkinsJSONConstants.BUILD_KEY_ACTIONS).get(actionCauseObjectIndex)).getJSONArray(JenkinsJSONConstants.BUILD_KEY_ACTIONS_CAUSES).get(0)).getString(JenkinsJSONConstants.BUILD_KEY_ACTIONS_CAUSES_STARTED_BY);		
 				
 		String pipelineAPIURL = mainURL + "/wfapi";
 		JSONParser pipelineJSONParser = new JSONParser();
@@ -60,11 +81,11 @@ public class ReadBuildAndStageInfo {
 		csvLine.append(JenkinsJSONConstants.DELIMITER_COMMA_SPACE);
 		
 		// append caused by user name
-		csvLine.append(causedByUserName);
-		csvLine.append(JenkinsJSONConstants.DELIMITER_COMMA_SPACE);
+		//csvLine.append(causedByUserName);
+		//csvLine.append(JenkinsJSONConstants.DELIMITER_COMMA_SPACE);
 		
 		// append branch information
-		csvLine.append("<Some_Branch>");
+		csvLine.append(projectBranch);
 				
 		// fetch stages information 
 		JSONArray stagesArray=pipelineJSONObject.getJSONArray(JenkinsJSONConstants.KEY_STAGES);
@@ -119,29 +140,5 @@ public class ReadBuildAndStageInfo {
 		}
 		return csvLine.toString();		
 	}
-	
-	public void setJenkinsURL(String jenkinsURL) {
-		this.jenkinsURL = jenkinsURL;
-	}
 
-
-	public void setProjectName(String projectName) {
-		this.projectName = projectName;
-	}
-
-
-	public void setProjectBranch(String projectBranch) {
-		this.projectBranch = projectBranch;
-	}
-
-
-	public void setBuildNumber(String buildNumber) {
-		this.buildNumber = buildNumber;
-	}
-
-
-	public void setMultiBranchPipeline(boolean multiBranchPipeline) {
-		this.multiBranchPipeline = multiBranchPipeline;
-	}
-    
 }
