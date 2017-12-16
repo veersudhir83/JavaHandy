@@ -9,7 +9,7 @@ public class TestReadBuildAndStageInfo {
 		String jenkinsURL = "http://192.168.43.115:8080";
 		String projectName = "devops-web-hackathon";
 		String projectBranch = "master";
-		int buildNumber = 6;
+		int buildNumber = 2;
 		boolean isMultiBranchPipeline = true;
 		
 		JobDetailsDAO jobDetailsObj = new JobDetailsDAO();
