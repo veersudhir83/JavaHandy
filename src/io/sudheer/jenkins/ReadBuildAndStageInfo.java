@@ -13,8 +13,6 @@ public class ReadBuildAndStageInfo {
 	private static StringBuilder stageNames = new StringBuilder();
 	
 	public static String getHeaderInfo() {
-		//String headerInfo = "Build, Overall Status, Date, Time, Branch, Total Duration, Build Delay, Pipeline Duration, Pipeline Delay, Pauses In Stage, Stage 1, Stage 2, Stage 3";
-		
 		StringBuilder headerInfo = new StringBuilder();
 		headerInfo.append("Build, Overall Status, Date, Time, Branch, Total Duration, Build Delay, Pipeline Duration, Pipeline Delay, Pauses In Stage");
 		headerInfo.append(stageNames.toString());
@@ -22,22 +20,22 @@ public class ReadBuildAndStageInfo {
 	}
 
 	public static StringBuilder getFullInfo(JobDetailsDAO jobDetailsDao) throws Exception {
-		StringBuilder sb = new StringBuilder();
 		
+		StringBuilder sb = new StringBuilder();
 		String queryURL = jobDetailsDao.getQueryURL();
 		String jobAPIURL = queryURL + "/api/json";
-		System.out.println("jobAPIURL=" + jobAPIURL);
 		JSONParser jobJSONParser = new JSONParser();
+		
 		// get full Json Object from URL
 		JSONObject jobJSONObject = jobJSONParser.getJSONFromUrl(jobAPIURL);
 		JSONArray buildsArray = jobJSONObject.getJSONArray(JenkinsJSONConstants.JOB_BUILDS);
 		
+		// loop through all build numbers and get the info
 		int availableBuildNumber = 0;
 		String tempLine = "";
 		for(int i = 0; i < buildsArray.length(); i++) {
 			JSONObject buildHistObj = (JSONObject) buildsArray.get(i);
 			availableBuildNumber = buildHistObj.getInt(JenkinsJSONConstants.JOB_BUILDS_NUMBER);
-			System.out.println("processing for build" + availableBuildNumber);
 			jobDetailsDao.setBuildNumber(availableBuildNumber);
 			tempLine = getBuildInfo(jobDetailsDao);
 			if(i == 0) {
@@ -46,17 +44,15 @@ public class ReadBuildAndStageInfo {
 				sb.append("\n").append(tempLine);
 			}
 		}
-		
 		return sb;
 	}
 	
 	public static String getBuildInfo(JobDetailsDAO jobDetailsDao) throws Exception {
 				
-		StringBuffer csvLine = new StringBuffer();
-		
+		StringBuilder csvLine = new StringBuilder();
 		String buildAPIURL = jobDetailsDao.getQueryURL() + "/" + jobDetailsDao.getBuildNumber() + "/api/json";
-		System.out.println("buildAPIURL=" + buildAPIURL);
 		JSONParser buildJSONParser = new JSONParser();
+		
 		// get full Json Object from URL
 		JSONObject buildJSONObject = buildJSONParser.getJSONFromUrl(buildAPIURL);
 		
@@ -69,7 +65,6 @@ public class ReadBuildAndStageInfo {
 		//causedByUserName = ((JSONObject) ((JSONObject) buildJSONObject.getJSONArray(JenkinsJSONConstants.BUILD_KEY_ACTIONS).get(actionCauseObjectIndex)).getJSONArray(JenkinsJSONConstants.BUILD_KEY_ACTIONS_CAUSES).get(0)).getString(JenkinsJSONConstants.BUILD_KEY_ACTIONS_CAUSES_STARTED_BY);		
 				
 		String pipelineAPIURL = jobDetailsDao.getQueryURL() + "/" + jobDetailsDao.getBuildNumber() + "/wfapi";
-		System.out.println("pipelineAPIURL=" + pipelineAPIURL);
 		JSONParser pipelineJSONParser = new JSONParser();
 		// get full Json Object from URL
 		JSONObject pipelineJSONObject = pipelineJSONParser.getJSONFromUrl(pipelineAPIURL);
@@ -98,12 +93,11 @@ public class ReadBuildAndStageInfo {
 				
 		// fetch stages information 
 		JSONArray stagesArray=pipelineJSONObject.getJSONArray(JenkinsJSONConstants.KEY_STAGES);
-		System.out.println("Number of Stages = " + stagesArray.length());
 		
 		int overallPipelineDurationInSecs = 0;
 		int overallStagePauseInSecs = 0;
-		StringBuffer stagesTimes = new StringBuffer();
-		String tempStageNames = "";
+		StringBuilder stagesTimes = new StringBuilder();
+		StringBuilder tempStageNames = new StringBuilder();
 		if(stagesArray.length() > 0) {
 			JSONObject stage = null;
 			for (int i = 0; i < stagesArray.length(); i++) {
@@ -114,10 +108,10 @@ public class ReadBuildAndStageInfo {
 				stagesTimes.append(JenkinsJSONConstants.DELIMITER_COMMA_SPACE);
 				stagesTimes.append(stageDurationInSecs/60).append(".").append(stageDurationInSecs%60);		
 				if(stageNames.toString().isEmpty()) {
-					tempStageNames += JenkinsJSONConstants.DELIMITER_COMMA_SPACE + stage.getString(JenkinsJSONConstants.STAGE_KEY_NAME);
+					tempStageNames.append(JenkinsJSONConstants.DELIMITER_COMMA_SPACE + stage.getString(JenkinsJSONConstants.STAGE_KEY_NAME));
 				}
 			}
-			stageNames.append(tempStageNames);
+			stageNames.append(tempStageNames.toString());
 		}		
 		
 		// If build is Success.. then only append do the following stage information
@@ -128,12 +122,10 @@ public class ReadBuildAndStageInfo {
 			csvLine.append(JenkinsJSONConstants.DELIMITER_COMMA_SPACE);
 			csvLine.append(buildDurationFromJenkinsInSecs/60).append(".").append(buildDurationFromJenkinsInSecs%60);
 			
-			
 			// Append Build Delay
 			int buildDelayInSecs = buildDurationFromJenkinsInSecs - overallPipelineDurationInSecs;			
 			csvLine.append(JenkinsJSONConstants.DELIMITER_COMMA_SPACE);
 			csvLine.append(buildDelayInSecs/60).append(".").append(buildDelayInSecs%60);
-				
 		
 			// Append Pipeline Duration
 			csvLine.append(JenkinsJSONConstants.DELIMITER_COMMA_SPACE);

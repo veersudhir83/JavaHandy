@@ -16,7 +16,7 @@ public class TestReadBuildAndStageInfo {
 		jobDetailsObj.setJenkinsURL(jenkinsURL);
 		jobDetailsObj.setProjectName(projectName);
 		jobDetailsObj.setProjectBranch(projectBranch);
-		jobDetailsObj.setBuildNumber(buildNumber);
+		
 		jobDetailsObj.setIsMultiBranchPipeline(isMultiBranchPipeline);
 		
 		//URL for MultiBranch Configuration Pipelines
@@ -26,7 +26,9 @@ public class TestReadBuildAndStageInfo {
 		//String mainURL = "http://192.168.43.115:8080/job/devops-web-maven/26";
 		
 		System.out.println(ReadBuildAndStageInfo.getFullInfo(jobDetailsObj));
-		//System.out.println(ReadBuildAndStageInfo.getBuildInfo(jobDetailsObj));
+		jobDetailsObj.setBuildNumber(buildNumber);
+		String temp = ReadBuildAndStageInfo.getBuildInfo(jobDetailsObj);
+		System.out.println(ReadBuildAndStageInfo.getHeaderInfo() + "\n" + temp);
 
 	}
 

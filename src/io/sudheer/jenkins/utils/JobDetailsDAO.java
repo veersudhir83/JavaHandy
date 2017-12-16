@@ -8,6 +8,10 @@ public class JobDetailsDAO {
 	private int buildNumber = -1;
 	private boolean isMultiBranchPipeline = false;
 	
+	/**
+	 * Adjusts the main jenkins url based on the input arguments
+	 * @return queryURL
+	 */
 	public String getQueryURL() {
 		String queryURL = this.jenkinsURL + "/job/" + this.projectName + "/";
 		if(this.isMultiBranchPipeline) {
