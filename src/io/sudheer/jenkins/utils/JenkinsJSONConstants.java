@@ -1,4 +1,4 @@
-package io.sudheer.practice.jenkins;
+package io.sudheer.jenkins.utils;
 
 public class JenkinsJSONConstants {
 	public static final String DELIMITER_COMMA_SPACE = ", ";
@@ -23,7 +23,7 @@ public class JenkinsJSONConstants {
 	public static final String PIPELINE_QUEUE_DURATION = "queueDurationMillis";
 	
 	public static final String STAGE_KEY_ID = "id";
-	public static final String STAGE_KEY_NAME = "stage";
+	public static final String STAGE_KEY_NAME = "name";
 	public static final String STAGE_KEY_STATUS = "status";
 	public static final String STAGE_START_TIME_MILLIS = "startTimeMillis";
 	public static final String STAGE_DURATION_MILLIS = "durationMillis";
