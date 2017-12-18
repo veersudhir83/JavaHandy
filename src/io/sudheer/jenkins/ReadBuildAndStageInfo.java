@@ -53,6 +53,7 @@ public class ReadBuildAndStageInfo {
 				
 		StringBuilder csvLine = new StringBuilder();
 		String buildAPIURL = jobDetailsDao.getQueryURL() + "/" + jobDetailsDao.getBuildNumber() + "/api/json";
+		System.out.println(buildAPIURL);
 		JSONParser buildJSONParser = new JSONParser();
 		
 		// get full Json Object from URL
