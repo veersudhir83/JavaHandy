@@ -1,4 +1,4 @@
-package test;
+package io.sudheer.practice.simple;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
