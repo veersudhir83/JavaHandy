@@ -1,6 +1,6 @@
 package io.sudheer.practice.simple;
 
-import io.sudheer.jenkins.utils.AttributeNamesEnum;
+import io.sudheer.practice.simple.util.AttributeNamesEnum;
 
 public class AttributeNamesEnumTest {
 
