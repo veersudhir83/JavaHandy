@@ -57,8 +57,8 @@ public class AZLookup {
 	
 	/** Constructor. Invokes the default constructor to create a connection object and
 	 * sets the host name and port number for the LDAP server.
-	 * @param LDAP server name or IP address
-	 * @param LDAP port number
+	 * @param serverName server name or IP address
+	 * @param portNumber port number
 	 */
 	public AZLookup(final String serverName, final int portNumber) {
 		this();
@@ -76,7 +76,7 @@ public class AZLookup {
 
 	/** Sets the LDAP server name
 	 * 
-	 * @param LDAP host name or IP address
+	 * @param serverName host name or IP address
 	 */
 	public void setServerName(String serverName) {
 		this.serverName = serverName;
@@ -92,7 +92,7 @@ public class AZLookup {
 
 	/** Sets the LDAP server port
 	 * 
-	 * @param LDAP server port
+	 * @param portNumber server port
 	 */
 	public void setPortNumber(int portNumber) {
 		this.portNumber = portNumber;

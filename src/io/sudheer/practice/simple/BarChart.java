@@ -17,7 +17,7 @@ public class BarChart extends JPanel
 	
 	/**
 	 * Add new bar to chart
-	 * @param color color to display bar
+	 * @param app to display bar
 	 * @param value size of bar
 	 */
 	public void addBar(String app, int value)

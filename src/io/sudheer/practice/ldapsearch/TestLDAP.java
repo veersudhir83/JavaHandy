@@ -21,7 +21,7 @@ public class TestLDAP {
 	
 	/**
 	 * Sudheer: Method to fetch list of all organization names from LDAP
-	 * @param request
+	 * @param orgPattern
 	 * @return list of all matching organization names
 	 */
 	public static void getOrganizationNames(String orgPattern) {

@@ -92,7 +92,7 @@ public class AZPerson {
 
 	/** Sets the GE person flag
 	 * 
-	 * @param set to true if GE person
+	 * @param gePerson to true if GE person
 	 */
 	public void setGePerson(boolean gePerson) {
 		this.gePerson = gePerson;

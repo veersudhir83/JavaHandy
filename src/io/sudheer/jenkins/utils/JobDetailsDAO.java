@@ -51,31 +51,31 @@ public class JobDetailsDAO {
 		return isMultiBranchPipeline;
 	}
 	/**
-	 * @param jenkinsurl the jenkinsurl to set
+	 * @param jenkinsURL the jenkinsurl to set
 	 */
 	public void setJenkinsURL(String jenkinsURL) {
 		this.jenkinsURL = jenkinsURL;
 	}
 	/**
-	 * @param projectname the projectname to set
+	 * @param projectName the projectname to set
 	 */
 	public void setProjectName(String projectName) {
 		this.projectName = projectName;
 	}
 	/**
-	 * @param projectbranch the projectbranch to set
+	 * @param projectBranch the projectbranch to set
 	 */
 	public void setProjectBranch(String projectBranch) {
 		this.projectBranch = projectBranch;
 	}
 	/**
-	 * @param buildnumber the buildnumber to set
+	 * @param buildNumber the buildnumber to set
 	 */
 	public void setBuildNumber(int buildNumber) {
 		this.buildNumber = buildNumber;
 	}
 	/**
-	 * @param ismultibranchpipeline the ismultibranchpipeline to set
+	 * @param isMultiBranchPipeline the ismultibranchpipeline to set
 	 */
 	public void setIsMultiBranchPipeline(boolean isMultiBranchPipeline) {
 		this.isMultiBranchPipeline = isMultiBranchPipeline;
