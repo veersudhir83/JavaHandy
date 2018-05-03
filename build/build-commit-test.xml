@@ -1,4 +1,4 @@
-<project name="codequality" default="commit" basedir="." xmlns:ac="antlib:net.sf.antcontrib" xmlns:jacoco="antlib:org.jacoco.ant">
+<project name="codequality" default="commit" basedir=".." xmlns:ac="antlib:net.sf.antcontrib" xmlns:jacoco="antlib:org.jacoco.ant">
 	<description>   
         Ant build sample for code commit
     </description>
@@ -8,12 +8,12 @@
 			dest="codequality/report"/>
 	</target>
 	
-	<property name="cvs.directory" location="report" />
+	<property name="cvs.directory" location="../report" />
 	<target name="commit">
 		<echo>Updating from CVS....</echo>
 		<cvs cvsRoot=":ext:afngfor@openge.ge.com:/cvsroot/pmd-automation"
 		   package="codequality"
-		   dest="${basedir}/"/>
+		   dest="//"/>
 		<echo>Commiting file to CVS....</echo>
 		<cvs command="commit report/SampleFile.txt" cvsRoot="${cvs.directory}" quiet="true" failonerror="false"/>
     </target>

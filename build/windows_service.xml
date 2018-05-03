@@ -1,4 +1,4 @@
-<project name="windowsservices" default="run" basedir=".">
+<project name="windowsservices" default="run" basedir="..">
 	<description>
 		To stop windows services
 	</description>
@@ -21,7 +21,7 @@
 
 	<target name="stop.service">
 		<service action="stop" service="${servicename}" />
-		<exec dir="." executable="cmd.exe">
+		<exec dir=".." executable="cmd.exe">
 			<arg line="/c taskkill /f /fi 'services eq ${servicename}' " />
 		</exec>
 		<sleep seconds="5" />
