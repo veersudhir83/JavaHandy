@@ -6,12 +6,14 @@ import java.io.IOException;
 
 public class IntelliJTest {
     public static void main(String[] args) throws IOException {
-        String jsonStr = "{\"name\": \"Sudheer\"}";
+        StringBuffer jsonStr = new StringBuffer();
+        jsonStr.append("{\"name\": \"Sudheer\"}");
 
-        BufferedReader reader = new BufferedReader(new FileReader("abc.txt"));
+        //BufferedReader reader = new BufferedReader(new FileReader("abc.txt"));
 
-        String read = reader.readLine().toUpperCase();
+        //String read = reader.readLine().toUpperCase();
 
+        System.out.println("jsonStr = " + jsonStr);
     }
 }
 
