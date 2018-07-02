@@ -2,6 +2,7 @@ package io.sudheer.practice.simple;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import org.apache.commons.collections.ListUtils;
 
 import static java.util.stream.Collectors.toCollection;
 
@@ -27,12 +28,19 @@ public class ListsMergeAndSort {
         // sort the individual lists based on ranking
         List<OptedValueDTO> explict = (ArrayList) list1.stream().sorted(Comparator.comparing(OptedValueDTO::getRank)).collect(Collectors.toList());
         List<OptedValueDTO> implicit = (ArrayList) list2.stream().sorted(Comparator.comparing(OptedValueDTO::getRank)).collect(Collectors.toList());
+        List<OptedValueDTO> implicitWith0Ranks = new ArrayList<>(implicit.stream()
+                .peek(f -> f.setRank(0))
+                .collect(Collectors.toList()));
 
         List<OptedValueDTO> result = new ArrayList<>(explict.size() + implicit.size());
+        List<OptedValueDTO> intersection = ListUtils.intersection(explict, implicitWith0Ranks);
 
+        explict.removeAll(implicitWith0Ranks);
+        implicitWith0Ranks.removeAll(intersection);
         // we should add the left-over elements
+        result.addAll(intersection);
         result.addAll(explict);
-        result.addAll(implicit);
+        result.addAll(implicitWith0Ranks);
 
         return result;
     }

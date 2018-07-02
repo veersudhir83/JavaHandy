@@ -35,4 +35,24 @@ public class OptedValueDTO {
         this.value = value;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        OptedValueDTO sample = (OptedValueDTO) o;
+
+        if (!value.equals(sample.value)) return false;
+        return value.equals(sample.value);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = value.hashCode();
+        result = 31 * result + value.hashCode();
+        return result;
+    }
+
+
 }
