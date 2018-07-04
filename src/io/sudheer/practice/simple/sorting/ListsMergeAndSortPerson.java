@@ -1,7 +1,6 @@
-package io.sudheer.practice.simple;
+package io.sudheer.practice.simple.sorting;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toCollection;
 import static java.util.Comparator.comparingInt;

@@ -1,10 +1,8 @@
-package io.sudheer.practice.simple;
+package io.sudheer.practice.simple.sorting;
 
 import java.util.*;
 import java.util.stream.Collectors;
 import org.apache.commons.collections.ListUtils;
-
-import static java.util.stream.Collectors.toCollection;
 
 public class ListsMergeAndSort {
 

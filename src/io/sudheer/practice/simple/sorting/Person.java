@@ -1,4 +1,4 @@
-package io.sudheer.practice.simple;
+package io.sudheer.practice.simple.sorting;
 
 public class Person {
     private String name;
