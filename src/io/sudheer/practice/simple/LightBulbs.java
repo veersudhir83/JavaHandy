@@ -10,7 +10,6 @@ class LightBulbs {
 
     public static void main (String[] args) {
         int[] lights = {3, 2, 1, 5, 4};
-        System.out.println("Length of lights = " + lights.length);
         System.out.println("Count = " + solution(lights));
     }
 
@@ -20,12 +19,7 @@ class LightBulbs {
         try {
             boolean[] turnedOnArray = new boolean[A.length];
             Arrays.fill(turnedOnArray, false);
-            for (int k = 0; k < turnedOnArray.length; k++) {
-                System.out.println("Value at index " + k + "is" + turnedOnArray[k]);
-            }
-            System.out.println(turnedOnArray);
             for (int i = 0; i < A.length; i++) {
-                System.out.println("A[i] = " + A[i]);
                 turnedOnArray[A[i]-1] = true;
                 if (checkCounter(turnedOnArray, i))
                     count++;
