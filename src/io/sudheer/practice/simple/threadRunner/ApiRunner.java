@@ -7,7 +7,7 @@ public class ApiRunner {
 
 	public static void main(String[] args) {
 	
-		String[] tt = {"1e832262-c5a5-43be-a9dc-ceca7d8c8e3a",
+		String[] userGuids = {"1e832262-c5a5-43be-a9dc-ceca7d8c8e3a",
         		"da98379a-f9b3-4b76-83fa-ac475366f1dd",
         		"13d926c7-adcb-4e22-ab7f-26fafb3e61be",
         		"54577688-952c-46f7-b470-c02fc4a72436",
@@ -27,15 +27,16 @@ public class ApiRunner {
         		"e9c487c6-9033-44db-a69b-c7134312ced4",
         		"aca9de06-0ca1-4adf-ac55-772c7b2c68aa",
         		"ba9ed9a9-86c7-4fcd-a3ab-2e09d35c7370"};
-        Thread t1;
+        Thread thread;
         int i=0;
-        for (String a : tt) {
+        for (String guid : userGuids) {
         	MyRunnable mr3 = new MyRunnable();
-            mr3.addCurlURL("http://localhost:8080/xapi/homepage/v1/preferences/"+a+"?size=LARGE&htmlEncoding=true&currencyCode=USD&personalIdRowNumMap=23217-1%2C22211-3%2C22659-6%2C22705-7%2C23038-8%2C23088-9%2C22856-10&_application=SITE&_deviceType=DESKTOP&_regionCode=US");
-             t1 = new Thread(mr3,"t"+i);
-             System.out.println("thread-"+i);
-             i++;
-            t1.start();
+            mr3.addCurlURL("http://localhost:8080/xapi/homepage/v1/preferences/"+guid+"?size=LARGE&htmlEncoding=true&currencyCode=USD&personalIdRowNumMap=23217-1%2C22211-3%2C22659-6%2C22705-7%2C23038-8%2C23088-9%2C22856-10&_application=SITE&_deviceType=DESKTOP&_regionCode=US");
+            mr3.addThreadName("thread-"+i);
+			thread = new Thread(mr3,"t"+i);
+			System.out.println("thread-"+i);
+			i++;
+			thread.start();
 		}
         
         Date date=new Date();

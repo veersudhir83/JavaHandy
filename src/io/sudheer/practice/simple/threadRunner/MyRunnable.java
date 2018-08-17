@@ -8,10 +8,14 @@ import java.util.stream.Collectors;
 public class MyRunnable implements Runnable {
 
     String curlcommand = "";
+    String threadName = "";
 
     public void addCurlURL(String url) {
     	this.curlcommand = url;
     }
+	public void addThreadName(String threadName) {
+		this.threadName = threadName;
+	}
 
     @Override
 	public void run() {
@@ -22,7 +26,7 @@ public class MyRunnable implements Runnable {
 				String result;
 				result = br.lines().collect(Collectors.joining("\n"));
 
-				System.out.println(curlcommand + "\n thread" + result.toString());
+				System.out.println(curlcommand + "\n" + threadName + result.toString());
 			}
 		}catch (Exception e) {
 			e.printStackTrace();
