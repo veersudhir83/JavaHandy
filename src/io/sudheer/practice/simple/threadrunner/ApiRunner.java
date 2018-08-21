@@ -16,7 +16,8 @@ public class ApiRunner {
 		URL url = loader.getResource("log4j.properties");
 		PropertyConfigurator.configure(url);
 	
-		String[] userGuids = {"1e832262-c5a5-43be-a9dc-ceca7d8c8e3a",
+		String[] userGuids = {
+				"1e832262-c5a5-43be-a9dc-ceca7d8c8e3a",
         		"da98379a-f9b3-4b76-83fa-ac475366f1dd",
         		"13d926c7-adcb-4e22-ab7f-26fafb3e61be",
         		"54577688-952c-46f7-b470-c02fc4a72436",
