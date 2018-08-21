@@ -1,11 +1,15 @@
 package io.sudheer.practice.simple.threadrunner;
 
+import org.apache.log4j.Logger;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.stream.Collectors;
 
 public class MyRunnable implements Runnable {
+
+	final static Logger LOGGER = Logger.getLogger(MyRunnable.class);
 
     String curlcommand = "";
     String threadName = "";
@@ -25,7 +29,7 @@ public class MyRunnable implements Runnable {
 				String result;
 				result = br.lines().collect(Collectors.joining("\n"));
 
-				System.out.println(curlcommand + "\n" + threadName + result);
+				LOGGER.info("\nthreadName=" + threadName + "\ncurlCommand=" + curlcommand + "\nresult=" + result + "\n");
 			}
 		}catch (Exception e) {
 			e.printStackTrace();

@@ -2,10 +2,19 @@ package io.sudheer.practice.simple.threadrunner;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
+import java.net.URL;
 
 public class ApiRunner {
 
+	final static Logger LOGGER = Logger.getLogger(ApiRunner.class);
+
 	public static void main(String[] args) {
+
+		ClassLoader loader = Thread.currentThread().getContextClassLoader();
+		URL url = loader.getResource("log4j.properties");
+		PropertyConfigurator.configure(url);
 	
 		String[] userGuids = {"1e832262-c5a5-43be-a9dc-ceca7d8c8e3a",
         		"da98379a-f9b3-4b76-83fa-ac475366f1dd",
@@ -39,7 +48,7 @@ public class ApiRunner {
 		}
         
         Date date=new Date();
-        System.out.println(new SimpleDateFormat("yyyy.MM.dd  HH:mm:ss").format(date));
+		LOGGER.info(new SimpleDateFormat("yyyy.MM.dd  HH:mm:ss").format(date));
        
 	}
 
