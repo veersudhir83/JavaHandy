@@ -20,7 +20,6 @@ public class MyRunnable implements Runnable {
     @Override
 	public void run() {
 		try {
-			System.out.println("--->"+curlcommand);
 			URL url = new URL(curlcommand);
 			try (BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream(), "UTF-8"))) {
 				String result;

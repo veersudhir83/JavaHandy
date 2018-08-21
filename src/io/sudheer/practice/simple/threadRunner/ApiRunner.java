@@ -34,7 +34,6 @@ public class ApiRunner {
             mr3.addCurlURL("http://localhost:8080/xapi/homepage/v1/preferences/"+guid+"?size=LARGE&htmlEncoding=true&currencyCode=USD&personalIdRowNumMap=23217-1%2C22211-3%2C22659-6%2C22705-7%2C23038-8%2C23088-9%2C22856-10&_application=SITE&_deviceType=DESKTOP&_regionCode=US");
             mr3.addThreadName("thread-"+i);
 			thread = new Thread(mr3,"t"+i);
-			System.out.println("thread-"+i);
 			i++;
 			thread.start();
 		}
