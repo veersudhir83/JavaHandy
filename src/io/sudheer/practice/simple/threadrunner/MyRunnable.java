@@ -1,4 +1,4 @@
-package io.sudheer.practice.simple.threadRunner;
+package io.sudheer.practice.simple.threadrunner;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -25,7 +25,7 @@ public class MyRunnable implements Runnable {
 				String result;
 				result = br.lines().collect(Collectors.joining("\n"));
 
-				System.out.println(curlcommand + "\n" + threadName + result.toString());
+				System.out.println(curlcommand + "\n" + threadName + result);
 			}
 		}catch (Exception e) {
 			e.printStackTrace();

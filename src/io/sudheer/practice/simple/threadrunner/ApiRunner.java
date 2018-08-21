@@ -1,4 +1,4 @@
-package io.sudheer.practice.simple.threadRunner;
+package io.sudheer.practice.simple.threadrunner;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
