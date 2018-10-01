@@ -8,7 +8,7 @@ import java.net.URL;
 
 public class ApiRunner {
 
-	final static Logger LOGGER = Logger.getLogger(ApiRunner.class);
+	static final Logger LOGGER = Logger.getLogger(ApiRunner.class);
 
 	public static void main(String[] args) {
 

@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 public class MyRunnable implements Runnable {
 
-	final static Logger LOGGER = Logger.getLogger(MyRunnable.class);
+	static final Logger LOGGER = Logger.getLogger(MyRunnable.class);
 
     String curlcommand = "";
     String threadName = "";
@@ -32,7 +32,7 @@ public class MyRunnable implements Runnable {
 				LOGGER.info("\nthreadName=" + threadName + "\ncurlCommand=" + curlcommand + "\nresult=" + result + "\n");
 			}
 		}catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.debug(e.getMessage());
 		}
 	}
 
