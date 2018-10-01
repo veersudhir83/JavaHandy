@@ -1,36 +1,35 @@
 package io.sudheer.jenkins;
 
-import io.sudheer.jenkins.ReadBuildAndStageInfo;
 import io.sudheer.jenkins.utils.JobDetailsDAO;
+import org.apache.log4j.Logger;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class TestReadBuildAndStageInfo {
 
+	static final Logger LOGGER = Logger.getLogger(TestReadBuildAndStageInfo.class);
+
 	public static void main(String[] args) throws Exception {
-		String jenkinsURL = "http://10.1.107.45:9999";
-		String projectName = "MediConnekt-DEV";
-		String projectBranch = "master";
+		String jenkinsURL = "http://localhost:9999";
+		String projectName = "pipeline-devops-web-maven";
+		List<String> projectBranches = Arrays.asList("master");
 		
 		boolean isMultiBranchPipeline = false;
 		
 		JobDetailsDAO jobDetailsObj = new JobDetailsDAO();
 		jobDetailsObj.setJenkinsURL(jenkinsURL);
 		jobDetailsObj.setProjectName(projectName);
-		jobDetailsObj.setProjectBranch(projectBranch);
-		
 		jobDetailsObj.setIsMultiBranchPipeline(isMultiBranchPipeline);
-		
-		//URL for MultiBranch Configuration Pipelines
-		//String mainURL = "http://192.168.43.115:8080/job/devops-web-hackathon/job/master/4";
-		
-		//URL for Simple Pipelines
-		//String mainURL = "http://192.168.43.115:8080/job/devops-web-maven/26";
-		
-		System.out.println(ReadBuildAndStageInfo.getFullInfo(jobDetailsObj));
-		/*int buildNumber = 2;
-		jobDetailsObj.setBuildNumber(buildNumber);
-		String temp = ReadBuildAndStageInfo.getBuildInfo(jobDetailsObj);
-		System.out.println(ReadBuildAndStageInfo.getHeaderInfo() + "\n" + temp);
-		*/
-	}
 
+		projectBranches.forEach(branch -> {
+			try {
+				jobDetailsObj.setProjectBranch(branch);
+				String jobData = ReadBuildAndStageInfo.getFullInfo(jobDetailsObj).toString();
+				LOGGER.info(!jobData.isEmpty() ? jobData : "Job Details could not be found");
+			} catch (Exception e) {
+				LOGGER.debug(e.getMessage());
+			}
+		});
+	}
 }

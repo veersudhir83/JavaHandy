@@ -1,5 +1,6 @@
 package io.sudheer.jenkins;
 
+import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -9,6 +10,8 @@ import io.sudheer.jenkins.utils.JSONParser;
 import io.sudheer.jenkins.utils.CalendarUtils;
 
 public class ReadBuildAndStageInfo {
+
+	static final Logger LOGGER = Logger.getLogger(ReadBuildAndStageInfo.class);
 	
 	private static StringBuilder stageNames = new StringBuilder();
 	
@@ -16,7 +19,7 @@ public class ReadBuildAndStageInfo {
 	
 	public static String getHeaderInfo() {
 		StringBuilder headerInfo = new StringBuilder();
-		headerInfo.append("Build, Overall Status, Date, Time, Branch, Total Duration, Build Delay, Pipeline Duration, Pipeline Delay, Pauses In Stage");
+		headerInfo.append("\nBuild, Overall Status, Date, Time, Branch, Total Duration, Build Delay, Pipeline Duration, Pipeline Delay, Pauses In Stage");
 		headerInfo.append(stageNames.toString());
 		return headerInfo.toString();
 	}
@@ -30,20 +33,22 @@ public class ReadBuildAndStageInfo {
 		
 		// get full Json Object from URL
 		JSONObject jobJSONObject = jobJSONParser.getJSONFromUrl(jobAPIURL);
-		JSONArray buildsArray = jobJSONObject.getJSONArray(JenkinsJSONConstants.JOB_BUILDS);
-		
-		// loop through all build numbers and get the info
-		int availableBuildNumber = 0;
-		String tempLine = "";
-		for(int i = 0; i < buildsArray.length(); i++) {
-			JSONObject buildHistObj = (JSONObject) buildsArray.get(i);
-			availableBuildNumber = buildHistObj.getInt(JenkinsJSONConstants.JOB_BUILDS_NUMBER);
-			jobDetailsDao.setBuildNumber(availableBuildNumber);
-			tempLine = getBuildInfo(jobDetailsDao);
-			if(i == 0) {
-				sb.append(getHeaderInfo()).append("\n").append(tempLine);
-			} else {
-				sb.append("\n").append(tempLine);
+		if (jobJSONObject != null) {
+			JSONArray buildsArray = jobJSONObject.getJSONArray(JenkinsJSONConstants.JOB_BUILDS);
+
+			// loop through all build numbers and get the info
+			int availableBuildNumber = 0;
+			String tempLine = "";
+			for (int i = 0; i < buildsArray.length(); i++) {
+				JSONObject buildHistObj = (JSONObject) buildsArray.get(i);
+				availableBuildNumber = buildHistObj.getInt(JenkinsJSONConstants.JOB_BUILDS_NUMBER);
+				jobDetailsDao.setBuildNumber(availableBuildNumber);
+				tempLine = getBuildInfo(jobDetailsDao);
+				if (i == 0) {
+					sb.append(getHeaderInfo()).append("\n").append(tempLine);
+				} else {
+					sb.append("\n").append(tempLine);
+				}
 			}
 		}
 		return sb;
@@ -53,7 +58,7 @@ public class ReadBuildAndStageInfo {
 				
 		StringBuilder csvLine = new StringBuilder();
 		String buildAPIURL = jobDetailsDao.getQueryURL() + "/" + jobDetailsDao.getBuildNumber() + "/api/json";
-		System.out.println(buildAPIURL);
+		//LOGGER.info(buildAPIURL);
 		JSONParser buildJSONParser = new JSONParser();
 		
 		// get full Json Object from URL

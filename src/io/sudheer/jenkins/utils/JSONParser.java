@@ -11,22 +11,13 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class JSONParser {
-	
-	/**
-	 *  Usage:
-	 *  String url = "your url";
-		JSONParser jsonParser = new JSONParser();
- 		JSONObject object = jsonParser.getJSONFromUrl(url);
-		String content=object.getString("json key");
-		
-		For Array Objects:
-		JSONArray content=object.getJSONArray("stages");
-		System.out.println(content.get(0));
-	 */
+
+	static final Logger LOGGER = Logger.getLogger(JSONParser.class);
 
 	static InputStream is = null;
 	static JSONObject jObj = null;
@@ -64,25 +55,24 @@ public class JSONParser {
 	        String line = null;
 	        while ((line = reader.readLine()) != null) {
 	            sb.append(line + "\n");
-	            //System.out.println("Full JSON = " + line);
+	            //LOGGER.info("Full JSON = " + line);
 	        }
 	        is.close();
 	        json = sb.toString();
 	
 	    } catch (Exception e) {
-	        System.out.println("Buffer Error: Error converting result " + e.toString());
+			LOGGER.debug("Buffer Error: Error converting result " + e.toString());
 	    }
 	
 	    // try parse the string to a JSON object
 	    try {
 	        jObj = new JSONObject(json);
 	    } catch (JSONException e) {
-	        System.out.println("JSON Parser: Error parsing data " + e.toString());
-	        System.out.println("error on parse data in jsonparser.java");
+			LOGGER.debug("JSON Parser: Error parsing data " + e.toString());
+			LOGGER.debug("error on parse data in jsonparser.java");
 	    }
 	
 	    // return JSON String
 	    return jObj;
-	
 	}
 }
