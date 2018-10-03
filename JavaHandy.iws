@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8e7b0367-98bd-42ea-bf06-b87cb4cb2aa0" name="Default" comment="Added programs for testing streams">
+    <list default="true" id="8e7b0367-98bd-42ea-bf06-b87cb4cb2aa0" name="Default" comment="Updated jenkins-Java code for correctness">
+      <change afterPath="$PROJECT_DIR$/src/io/sudheer/practice/simple/Intersection.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/io/sudheer/practice/simple/OptedValueComparator.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/io/sudheer/practice/simple/OptedValueDTO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/JavaHandy.iws" beforeDir="false" afterPath="$PROJECT_DIR$/JavaHandy.iws" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/io/sudheer/jenkins/ReadBuildAndStageInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/io/sudheer/jenkins/ReadBuildAndStageInfo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/io/sudheer/jenkins/TestReadBuildAndStageInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/io/sudheer/jenkins/TestReadBuildAndStageInfo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/io/sudheer/jenkins/utils/JSONParser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/io/sudheer/jenkins/utils/JSONParser.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -18,19 +18,19 @@
     <session id="855964771">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="6" />
+          <entry key="project.closed" value="7" />
           <entry key="project.open.time.0" value="1" />
-          <entry key="project.open.time.1" value="3" />
+          <entry key="project.open.time.1" value="4" />
           <entry key="project.open.time.2" value="1" />
           <entry key="project.open.time.3" value="1" />
           <entry key="project.open.time.5" value="1" />
-          <entry key="project.opened" value="7" />
+          <entry key="project.opened" value="8" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="CSV" value="1" />
-          <entry key="java" value="21" />
+          <entry key="java" value="25" />
           <entry key="log" value="1" />
           <entry key="md" value="1" />
           <entry key="properties" value="1" />
@@ -38,22 +38,22 @@
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="JAVA" value="21" />
+          <entry key="JAVA" value="25" />
           <entry key="PLAIN_TEXT" value="3" />
           <entry key="Properties" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="java" value="2384" />
+          <entry key="java" value="2546" />
           <entry key="properties" value="9" />
-          <entry key="txt" value="172" />
+          <entry key="txt" value="226" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="2384" />
-          <entry key="PLAIN_TEXT" value="172" />
+          <entry key="JAVA" value="2546" />
+          <entry key="PLAIN_TEXT" value="226" />
           <entry key="Properties" value="9" />
         </counts>
       </usages-collector>
@@ -61,47 +61,34 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/io/sudheer/jenkins/ReadBuildAndStageInfo.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="418">
-              <caret line="46" column="29" selection-start-line="46" selection-start-column="29" selection-end-line="46" selection-end-column="29" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/io/sudheer/jenkins/utils/JSONParser.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="263">
-              <caret line="76" column="4" selection-start-line="76" selection-start-column="4" selection-end-line="76" selection-end-column="4" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/io/sudheer/jenkins/TestReadBuildAndStageInfo.java">
+        <entry file="file://$PROJECT_DIR$/src/io/sudheer/practice/simple/Intersection.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="272">
-              <caret line="16" column="8" lean-forward="true" selection-start-line="16" selection-start-column="8" selection-end-line="16" selection-end-column="8" />
+            <state relative-caret-position="329">
+              <caret line="42" column="107" selection-start-line="42" selection-start-column="107" selection-end-line="42" selection-end-column="107" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#394#409#0" expanded="true" />
+                <element signature="e#807#822#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/io/sudheer/jenkins/utils/JobDetailsDAO.java">
+        <entry file="file://$PROJECT_DIR$/src/io/sudheer/practice/simple/OptedValueComparator.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="207">
-              <caret line="16" column="40" selection-start-line="16" selection-start-column="40" selection-end-line="16" selection-end-column="40" />
+            <state relative-caret-position="44">
+              <caret line="2" selection-start-line="2" selection-end-line="2" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/io/sudheer/practice/simple/OptedValueDTO.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="132">
+              <caret line="6" column="47" selection-start-line="6" selection-start-column="47" selection-end-line="6" selection-end-column="47" />
             </state>
           </provider>
         </entry>
@@ -149,7 +136,6 @@
         <option value="$PROJECT_DIR$/src/io/sudheer/practice/simple/IntelliJTest.java" />
         <option value="$PROJECT_DIR$/src/io/sudheer/practice/simple/Person.java" />
         <option value="$PROJECT_DIR$/src/io/sudheer/practice/simple/ListsMergeAndSortPerson.java" />
-        <option value="$PROJECT_DIR$/src/io/sudheer/practice/simple/OptedValueDTO.java" />
         <option value="$PROJECT_DIR$/src/io/sudheer/practice/simple/ListsMergeAndSort.java" />
         <option value="$PROJECT_DIR$/src/io/sudheer/practice/simple/sorting/ListsMergeAndSort.java" />
         <option value="$PROJECT_DIR$/src/io/sudheer/practice/simple/sorting/SortTest.java" />
@@ -170,6 +156,9 @@
         <option value="$PROJECT_DIR$/src/io/sudheer/jenkins/utils/JSONParser.java" />
         <option value="$PROJECT_DIR$/src/io/sudheer/jenkins/ReadBuildAndStageInfo.java" />
         <option value="$PROJECT_DIR$/src/io/sudheer/jenkins/TestReadBuildAndStageInfo.java" />
+        <option value="$PROJECT_DIR$/src/io/sudheer/practice/simple/OptedValueComparator.java" />
+        <option value="$PROJECT_DIR$/src/io/sudheer/practice/simple/OptedValueDTO.java" />
+        <option value="$PROJECT_DIR$/src/io/sudheer/practice/simple/Intersection.java" />
       </list>
     </option>
   </component>
@@ -227,7 +216,15 @@
               <item name="JavaHandy" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="sudheer" type="462c0819:PsiDirectoryNode" />
-              <item name="jenkins" type="462c0819:PsiDirectoryNode" />
+              <item name="practice" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="JavaHandy" type="b2602c69:ProjectViewProjectNode" />
+              <item name="JavaHandy" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="sudheer" type="462c0819:PsiDirectoryNode" />
+              <item name="practice" type="462c0819:PsiDirectoryNode" />
+              <item name="simple" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="JavaHandy" type="b2602c69:ProjectViewProjectNode" />
@@ -291,15 +288,15 @@
     <property name="settings.editor.selected.configurable" value="reference.settingsDialog.application.dockerMachine" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\WORKSPACE\General\JavaHandy\src\io\sudheer\practice\simple\threadRunner" />
+      <recent name="D:\WORKSPACE\General\JavaHandy\lib" />
       <recent name="D:\WORKSPACE\General\JavaHandy\build" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="io.sudheer.practice.simple" />
     </key>
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\WORKSPACE\General\JavaHandy\src\io\sudheer\practice\simple\threadRunner" />
-      <recent name="D:\WORKSPACE\General\JavaHandy\lib" />
+    <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\WORKSPACE\General\JavaHandy\build" />
     </key>
   </component>
@@ -315,42 +312,14 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.TestReadBuildAndStageInfo">
-    <configuration name="ApiRunner" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="io.sudheer.practice.simple.threadrunner.ApiRunner" />
+  <component name="RunManager">
+    <configuration name="Intersection" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="io.sudheer.practice.simple.Intersection" />
       <module name="JavaHandy" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="io.sudheer.practice.simple.threadrunner.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="Streams" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="io.sudheer.practice.javastreams.Streams" />
-      <module name="JavaHandy" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="io.sudheer.practice.javastreams.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="TestReadBuildAndStageInfo" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="io.sudheer.jenkins.TestReadBuildAndStageInfo" />
-      <module name="JavaHandy" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="io.sudheer.jenkins.*" />
+          <option name="PATTERN" value="io.sudheer.practice.simple.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -378,16 +347,9 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <list>
-      <item itemvalue="Application.ApiRunner" />
-      <item itemvalue="Application.Streams" />
-      <item itemvalue="Application.TestReadBuildAndStageInfo" />
-    </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.TestReadBuildAndStageInfo" />
-        <item itemvalue="Application.Streams" />
-        <item itemvalue="Application.ApiRunner" />
+        <item itemvalue="Application.Intersection" />
       </list>
     </recent_temporary>
   </component>
@@ -511,21 +473,28 @@
       <option name="project" value="LOCAL" />
       <updated>1538387143613</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="Updated jenkins-Java code for correctness">
+      <created>1538391710221</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1538391710221</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.13006397" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.13113007" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="Favorites" order="3" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32963374" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4989339" visible="true" weight="0.42222223" />
-      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.49840087" weight="0.35777777" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4989339" weight="0.42222223" />
+      <window_info active="true" anchor="bottom" id="Debug" order="3" sideWeight="0.49840087" visible="true" weight="0.35777777" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -586,7 +555,8 @@
     <MESSAGE value="Added programs for testing curl urls in multithreaded env" />
     <MESSAGE value="Added programs for testing curl urls in multithreaded env: removed unwanted loggers" />
     <MESSAGE value="Added programs for testing streams" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added programs for testing streams" />
+    <MESSAGE value="Updated jenkins-Java code for correctness" />
+    <option name="LAST_COMMIT_MESSAGE" value="Updated jenkins-Java code for correctness" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -638,6 +608,18 @@
           <line>28</line>
           <properties />
           <option name="timeStamp" value="17" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/io/sudheer/practice/simple/Intersection.java</url>
+          <line>42</line>
+          <properties />
+          <option name="timeStamp" value="18" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/io/sudheer/practice/simple/Intersection.java</url>
+          <line>62</line>
+          <properties />
+          <option name="timeStamp" value="19" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -862,26 +844,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="360">
           <caret line="48" column="13" lean-forward="true" selection-start-line="48" selection-start-column="13" selection-end-line="48" selection-end-column="13" />
-          <folding>
-            <element signature="e#138#139#0" expanded="true" />
-            <element signature="e#163#164#0" expanded="true" />
-            <element signature="e#196#197#0" expanded="true" />
-            <element signature="e#224#225#0" expanded="true" />
-            <element signature="e#255#256#0" expanded="true" />
-            <element signature="e#282#283#0" expanded="true" />
-            <element signature="e#322#323#0" expanded="true" />
-            <element signature="e#354#355#0" expanded="true" />
-            <element signature="e#387#388#0" expanded="true" />
-            <element signature="e#416#417#0" expanded="true" />
-            <element signature="e#460#461#0" expanded="true" />
-            <element signature="e#496#497#0" expanded="true" />
-            <element signature="e#529#530#0" expanded="true" />
-            <element signature="e#558#559#0" expanded="true" />
-            <element signature="e#603#604#0" expanded="true" />
-            <element signature="e#639#640#0" expanded="true" />
-            <element signature="e#927#928#0" expanded="true" />
-            <element signature="e#1011#1012#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -909,9 +871,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="497">
           <caret line="54" lean-forward="true" selection-start-line="54" selection-end-line="54" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -922,9 +881,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="220">
           <caret line="10" column="50" selection-start-line="10" selection-start-column="33" selection-end-line="10" selection-end-column="50" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -942,16 +898,19 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/io/sudheer/jenkins/utils/JobDetailsDAO.java">
+    <entry file="file://$PROJECT_DIR$/src/io/sudheer/jenkins/TestReadBuildAndStageInfo.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="207">
-          <caret line="16" column="40" selection-start-line="16" selection-start-column="40" selection-end-line="16" selection-end-column="40" />
+        <state relative-caret-position="536">
+          <caret line="28" column="58" selection-start-line="28" selection-start-column="58" selection-end-line="28" selection-end-column="58" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/io/sudheer/jenkins/utils/JSONParser.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="263">
+        <state relative-caret-position="504">
           <caret line="76" column="4" selection-start-line="76" selection-start-column="4" selection-end-line="76" selection-end-column="4" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -961,20 +920,43 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/io/sudheer/jenkins/ReadBuildAndStageInfo.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="418">
-          <caret line="46" column="29" selection-start-line="46" selection-start-column="29" selection-end-line="46" selection-end-column="29" />
+        <state>
+          <caret line="27" column="4" selection-start-line="27" selection-start-column="4" selection-end-line="27" selection-end-column="4" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/io/sudheer/jenkins/TestReadBuildAndStageInfo.java">
+    <entry file="file://$PROJECT_DIR$/src/io/sudheer/jenkins/utils/JobDetailsDAO.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="16" column="8" lean-forward="true" selection-start-line="16" selection-start-column="8" selection-end-line="16" selection-end-column="8" />
+        <state relative-caret-position="207">
+          <caret line="16" column="40" selection-start-line="16" selection-start-column="40" selection-end-line="16" selection-end-column="40" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/io/sudheer/practice/simple/OptedValueDTO.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="132">
+          <caret line="6" column="47" selection-start-line="6" selection-start-column="47" selection-end-line="6" selection-end-column="47" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/io/sudheer/practice/simple/OptedValueComparator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="44">
+          <caret line="2" selection-start-line="2" selection-end-line="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/io/sudheer/practice/simple/Intersection.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="329">
+          <caret line="42" column="107" selection-start-line="42" selection-start-column="107" selection-end-line="42" selection-end-column="107" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#394#409#0" expanded="true" />
+            <element signature="e#807#822#0" expanded="true" />
           </folding>
         </state>
       </provider>
