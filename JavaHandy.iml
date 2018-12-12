@@ -12,5 +12,6 @@
     <orderEntry type="library" name="com.lowagie.text-2.1.7 (2)" level="project" />
     <orderEntry type="library" name="org.apache.commons.io" level="project" />
     <orderEntry type="library" name="javax.faces-api-2.0" level="project" />
+    <orderEntry type="library" name="IPAddress" level="project" />
   </component>
 </module>

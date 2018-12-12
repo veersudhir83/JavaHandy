@@ -37,6 +37,17 @@
       <JAVADOC />
       <SOURCES />
     </library>
+    <library name="IPAddress">
+      <CLASSES>
+        <root url="jar://$PROJECT_DIR$/lib/IPAddress.jar!/" />
+      </CLASSES>
+      <JAVADOC>
+        <root url="jar://$PROJECT_DIR$/lib/IPAddress.jar!/javadoc" />
+      </JAVADOC>
+      <SOURCES>
+        <root url="jar://$PROJECT_DIR$/lib/IPAddress.jar!/" />
+      </SOURCES>
+    </library>
     <library name="javax.faces-api-2.0">
       <CLASSES>
         <root url="jar://$PROJECT_DIR$/lib/javax.faces-api-2.0.jar!/" />
