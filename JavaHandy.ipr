@@ -3,6 +3,7 @@
   <component name="AntConfiguration">
     <buildFile url="file://$PROJECT_DIR$/build.xml" />
   </component>
+  <component name="Encoding" addBOMForNewFiles="with NO BOM" />
   <component name="InspectionProjectProfileManager">
     <profile version="1.0">
       <option name="myName" value="Project Default" />
@@ -21,6 +22,29 @@
     <mapping directory="" vcs="Git" />
   </component>
   <component name="libraryTable">
+    <library name="com.lowagie.text-2.1.7">
+      <CLASSES />
+      <JAVADOC />
+      <SOURCES>
+        <root url="jar://$PROJECT_DIR$/lib/com.lowagie.text-2.1.7.jar!/" />
+      </SOURCES>
+      <jarDirectory url="jar://$PROJECT_DIR$/lib/com.lowagie.text-2.1.7.jar!/" recursive="false" type="SOURCES" />
+    </library>
+    <library name="com.lowagie.text-2.1.7 (2)">
+      <CLASSES>
+        <root url="jar://$PROJECT_DIR$/lib/com.lowagie.text-2.1.7.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
+    <library name="javax.faces-api-2.0">
+      <CLASSES>
+        <root url="jar://$PROJECT_DIR$/lib/javax.faces-api-2.0.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/javax.servlet-3.0.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+    </library>
     <library name="lib">
       <CLASSES>
         <root url="jar://$PROJECT_DIR$/lib/junit-4.12.jar!/" />
@@ -44,6 +68,15 @@
         <root url="jar://$PROJECT_DIR$/lib/LiveGraph.2.0.beta01.Complete.jar!/" />
         <root url="jar://$PROJECT_DIR$/lib/commons-collections-3.2.2.jar!/" />
         <root url="jar://$PROJECT_DIR$/lib/log4j-1.2.17.jar!/" />
+        <root url="jar://$PROJECT_DIR$/lib/com.lowagie.text-2.1.7.jar!/" />
+      </CLASSES>
+      <JAVADOC />
+      <SOURCES />
+      <jarDirectory url="jar://$PROJECT_DIR$/lib/com.lowagie.text-2.1.7.jar!/" recursive="false" />
+    </library>
+    <library name="org.apache.commons.io">
+      <CLASSES>
+        <root url="jar://$PROJECT_DIR$/lib/org.apache.commons.io.jar!/" />
       </CLASSES>
       <JAVADOC />
       <SOURCES />

@@ -1,0 +1,12 @@
+<html><body>
+<script language="JavaScript">
+var oWindow = window.external.menuArguments;
+var oDocument = oWindow.document;
+var oSelect = oDocument.selection;
+ 
+var oSelectRange = oSelect.createRange();
+var sSelText = oSelectRange.text;
+ 
+var n= oWindow.open( "http://www.merriam-webster.com/dictionary/"+sSelText, "_blank" );
+</script>
+</body></html>

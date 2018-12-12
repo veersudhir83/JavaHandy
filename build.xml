@@ -1,4 +1,4 @@
-<project name="codequality" default="run" basedir="." xmlns:ac="antlib:net.sf.antcontrib" xmlns:jacoco="antlib:org.jacoco.ant">
+<project name="JavaHandy" default="run" basedir=".">
 	<description>   
         Ant build sample for running 
     </description>
